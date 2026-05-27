@@ -17,17 +17,17 @@
   <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+KR:wght@200;300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css">
   <script src="config.js"></script>
 </head>
 <body>
 
-  <!-- ═══ Curtain Opening Animation ═══ -->
+  <!-- ═══ Curtain Opening (Watercolor Wash) ═══ -->
   <div id="curtain" class="curtain">
-    <div class="curtain__left"></div>
-    <div class="curtain__right"></div>
+    <div class="curtain__wash curtain__wash--top"></div>
+    <div class="curtain__wash curtain__wash--bottom"></div>
     <div class="curtain__content">
       <p class="curtain__subtitle">Wedding Invitation</p>
       <p class="curtain__names" id="curtainNames"></p>
@@ -35,8 +35,8 @@
     </div>
   </div>
 
-  <!-- ═══ Falling Petals ═══ -->
-  <canvas id="petalCanvas" class="petal-canvas"></canvas>
+  <!-- ═══ Falling Sparkles Canvas ═══ -->
+  <canvas id="sparkleCanvas" class="sparkle-canvas"></canvas>
 
   <!-- ═══ Toast Notification ═══ -->
   <div id="toast" class="toast" aria-live="polite"></div>
@@ -96,16 +96,19 @@
 
     <!-- ─── Greeting Section ─── -->
     <section class="section greeting" id="greeting">
+      <div class="wc-blob wc-blob--greeting"></div>
       <div class="section__inner">
-        <div class="ornament animate-item" data-animate="fade-in">&#10047;</div>
+        <div class="wc-ornament animate-item" data-animate="fade-in"></div>
         <h2 class="section__title animate-item" data-animate="fade-up" id="greetingTitle"></h2>
         <p class="greeting__text animate-item" data-animate="fade-up" id="greetingContent"></p>
         <div class="greeting__parents animate-item" data-animate="fade-up" id="greetingParents"></div>
       </div>
+      <div class="wc-divider"></div>
     </section>
 
     <!-- ─── Calendar Section ─── -->
     <section class="section calendar-section" id="calendarSection">
+      <div class="wc-blob wc-blob--calendar"></div>
       <div class="section__inner">
         <h2 class="section__title animate-item" data-animate="fade-up">예식 일시</h2>
         <div class="calendar animate-item" data-animate="scale-in" id="calendarGrid"></div>
@@ -120,27 +123,33 @@
           </button>
         </div>
       </div>
+      <div class="wc-divider"></div>
     </section>
 
     <!-- ─── Our Story Section ─── -->
     <section class="section story" id="story">
+      <div class="wc-blob wc-blob--story"></div>
       <div class="section__inner">
         <h2 class="section__title animate-item" data-animate="fade-up" id="storyTitle"></h2>
         <p class="story__text animate-item" data-animate="fade-up" id="storyContent"></p>
         <div class="story__photos" id="storyPhotos"></div>
       </div>
+      <div class="wc-divider"></div>
     </section>
 
     <!-- ─── Gallery Section ─── -->
     <section class="section gallery" id="gallery">
+      <div class="wc-blob wc-blob--gallery"></div>
       <div class="section__inner">
         <h2 class="section__title animate-item" data-animate="fade-up">갤러리</h2>
         <div class="gallery__grid" id="galleryGrid"></div>
       </div>
+      <div class="wc-divider"></div>
     </section>
 
     <!-- ─── Location Section ─── -->
     <section class="section location" id="location">
+      <div class="wc-blob wc-blob--location"></div>
       <div class="section__inner">
         <h2 class="section__title animate-item" data-animate="fade-up">오시는 길</h2>
         <div class="location__info animate-item" data-animate="fade-up">
@@ -161,10 +170,12 @@
           <a class="btn btn--naver" id="naverMapBtn" href="#" target="_blank" rel="noopener">네이버지도</a>
         </div>
       </div>
+      <div class="wc-divider"></div>
     </section>
 
     <!-- ─── Account Section (축의금) ─── -->
     <section class="section account" id="account">
+      <div class="wc-blob wc-blob--account"></div>
       <div class="section__inner">
         <h2 class="section__title animate-item" data-animate="fade-up">마음 전하실 곳</h2>
         <p class="account__desc animate-item" data-animate="fade-up">축하의 마음을 담아 축의금을 전달해 보세요.</p>
@@ -172,7 +183,7 @@
         <!-- Groom Accounts -->
         <div class="accordion animate-item" data-animate="fade-up">
           <button class="accordion__trigger" id="groomAccordion" aria-expanded="false">
-            <span class="accordion__icon">&#9835;</span>
+            <span class="accordion__icon">&#10047;</span>
             <span>신랑측 계좌번호</span>
             <svg class="accordion__arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>
@@ -184,7 +195,7 @@
         <!-- Bride Accounts -->
         <div class="accordion animate-item" data-animate="fade-up">
           <button class="accordion__trigger" id="brideAccordion" aria-expanded="false">
-            <span class="accordion__icon">&#9835;</span>
+            <span class="accordion__icon">&#10047;</span>
             <span>신부측 계좌번호</span>
             <svg class="accordion__arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
           </button>

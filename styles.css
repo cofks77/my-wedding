@@ -1,29 +1,33 @@
 /* ═══════════════════════════════════════════
-   Classic Elegant Wedding Invitation
+   Watercolor Soft Wedding Invitation
    Korean Mobile 청첩장 - Styles
    ═══════════════════════════════════════════ */
 
 /* ─── CSS Variables ─── */
 :root {
-  --color-bg: #faf8f5;
-  --color-bg-warm: #f5f0ea;
+  --color-bg: #fdfbf8;
+  --color-bg-alt: #f8f4f0;
   --color-bg-card: #ffffff;
-  --color-text: #3a3228;
-  --color-text-light: #7a7068;
-  --color-text-muted: #a09890;
-  --color-accent: #b8956a;
-  --color-accent-light: #d4b896;
-  --color-accent-dark: #96764e;
-  --color-border: #e8e0d8;
-  --color-divider: #d8cfc5;
-  --color-overlay: rgba(58, 50, 40, 0.6);
+  --color-text: #4a4a4a;
+  --color-text-light: #6e6e6e;
+  --color-text-muted: #9e9e9e;
+  --color-lavender: #e8dff0;
+  --color-blush: #f5e0e0;
+  --color-sky: #dce8f0;
+  --color-mint: #e0f0e8;
+  --color-accent: #c4a8d4;
+  --color-accent-light: #dcc8e8;
+  --color-accent-dark: #9a7baa;
+  --color-border: #ece4f0;
+  --color-divider: #e0d8e6;
+  --color-overlay: rgba(74, 74, 74, 0.55);
   --color-kakao: #fee500;
   --color-naver: #03c75a;
   --color-white: #ffffff;
-  --color-toast-bg: rgba(58, 50, 40, 0.9);
+  --color-toast-bg: rgba(74, 74, 74, 0.88);
 
-  --font-serif: 'Noto Serif KR', 'Georgia', serif;
-  --font-display: 'Cormorant Garamond', 'Noto Serif KR', serif;
+  --font-serif: 'Nanum Myeongjo', 'Georgia', serif;
+  --font-display: 'Cormorant Garamond', 'Nanum Myeongjo', serif;
 
   --spacing-xs: 0.5rem;
   --spacing-sm: 1rem;
@@ -32,9 +36,10 @@
   --spacing-xl: 4rem;
   --spacing-2xl: 6rem;
 
-  --radius-sm: 4px;
-  --radius-md: 8px;
-  --radius-lg: 16px;
+  --radius-sm: 6px;
+  --radius-md: 12px;
+  --radius-lg: 20px;
+  --radius-xl: 28px;
 
   --transition: 0.3s ease;
   --transition-slow: 0.6s ease;
@@ -113,7 +118,183 @@ a {
 }
 
 /* ═══════════════════════════════════════════
-   Curtain Opening Animation
+   Watercolor Blob Backgrounds
+   ═══════════════════════════════════════════ */
+.wc-blob {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.wc-blob--greeting::before,
+.wc-blob--greeting::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+}
+
+.wc-blob--greeting::before {
+  width: 300px;
+  height: 300px;
+  top: -60px;
+  right: -80px;
+  background: radial-gradient(circle, rgba(232, 223, 240, 0.5) 0%, rgba(232, 223, 240, 0.15) 50%, transparent 70%);
+}
+
+.wc-blob--greeting::after {
+  width: 250px;
+  height: 250px;
+  bottom: -40px;
+  left: -60px;
+  background: radial-gradient(circle, rgba(245, 224, 224, 0.45) 0%, rgba(245, 224, 224, 0.1) 50%, transparent 70%);
+}
+
+.wc-blob--calendar::before,
+.wc-blob--calendar::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+}
+
+.wc-blob--calendar::before {
+  width: 280px;
+  height: 280px;
+  top: -40px;
+  left: -70px;
+  background: radial-gradient(circle, rgba(220, 232, 240, 0.5) 0%, rgba(220, 232, 240, 0.12) 50%, transparent 70%);
+}
+
+.wc-blob--calendar::after {
+  width: 220px;
+  height: 220px;
+  bottom: -30px;
+  right: -50px;
+  background: radial-gradient(circle, rgba(224, 240, 232, 0.45) 0%, rgba(224, 240, 232, 0.1) 50%, transparent 70%);
+}
+
+.wc-blob--story::before,
+.wc-blob--story::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+}
+
+.wc-blob--story::before {
+  width: 320px;
+  height: 320px;
+  top: 10%;
+  right: -100px;
+  background: radial-gradient(circle, rgba(245, 224, 224, 0.4) 0%, rgba(245, 224, 224, 0.1) 50%, transparent 70%);
+}
+
+.wc-blob--story::after {
+  width: 260px;
+  height: 260px;
+  bottom: 10%;
+  left: -80px;
+  background: radial-gradient(circle, rgba(232, 223, 240, 0.4) 0%, rgba(232, 223, 240, 0.1) 50%, transparent 70%);
+}
+
+.wc-blob--gallery::before,
+.wc-blob--gallery::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+}
+
+.wc-blob--gallery::before {
+  width: 260px;
+  height: 260px;
+  top: -50px;
+  left: -60px;
+  background: radial-gradient(circle, rgba(224, 240, 232, 0.45) 0%, rgba(224, 240, 232, 0.1) 50%, transparent 70%);
+}
+
+.wc-blob--gallery::after {
+  width: 300px;
+  height: 300px;
+  bottom: -60px;
+  right: -80px;
+  background: radial-gradient(circle, rgba(220, 232, 240, 0.4) 0%, rgba(220, 232, 240, 0.1) 50%, transparent 70%);
+}
+
+.wc-blob--location::before,
+.wc-blob--location::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+}
+
+.wc-blob--location::before {
+  width: 280px;
+  height: 280px;
+  top: -40px;
+  right: -60px;
+  background: radial-gradient(circle, rgba(232, 223, 240, 0.4) 0%, rgba(232, 223, 240, 0.1) 50%, transparent 70%);
+}
+
+.wc-blob--location::after {
+  width: 240px;
+  height: 240px;
+  bottom: -50px;
+  left: -70px;
+  background: radial-gradient(circle, rgba(245, 224, 224, 0.35) 0%, rgba(245, 224, 224, 0.08) 50%, transparent 70%);
+}
+
+.wc-blob--account::before,
+.wc-blob--account::after {
+  content: '';
+  position: absolute;
+  border-radius: 50%;
+}
+
+.wc-blob--account::before {
+  width: 260px;
+  height: 260px;
+  top: -30px;
+  left: -50px;
+  background: radial-gradient(circle, rgba(220, 232, 240, 0.4) 0%, rgba(220, 232, 240, 0.1) 50%, transparent 70%);
+}
+
+.wc-blob--account::after {
+  width: 240px;
+  height: 240px;
+  bottom: -40px;
+  right: -60px;
+  background: radial-gradient(circle, rgba(224, 240, 232, 0.35) 0%, rgba(224, 240, 232, 0.08) 50%, transparent 70%);
+}
+
+/* ─── Watercolor Divider ─── */
+.wc-divider {
+  height: 2px;
+  margin: 0 auto;
+  max-width: 280px;
+  background: linear-gradient(
+    to right,
+    transparent 0%,
+    var(--color-lavender) 20%,
+    var(--color-blush) 40%,
+    var(--color-sky) 60%,
+    var(--color-mint) 80%,
+    transparent 100%
+  );
+  opacity: 0.6;
+}
+
+/* ─── Watercolor Ornament ─── */
+.wc-ornament {
+  width: 40px;
+  height: 40px;
+  margin: 0 auto var(--spacing-md);
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--color-lavender) 0%, var(--color-blush) 50%, transparent 70%);
+  opacity: 0.5;
+}
+
+/* ═══════════════════════════════════════════
+   Curtain Opening (Watercolor Wash)
    ═══════════════════════════════════════════ */
 .curtain {
   position: fixed;
@@ -122,38 +303,51 @@ a {
   display: flex;
   align-items: center;
   justify-content: center;
+  background: var(--color-bg);
 }
 
-.curtain__left,
-.curtain__right {
+.curtain__wash {
   position: absolute;
-  top: 0;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(180deg, #4a3f35 0%, #3a3228 100%);
-  transition: transform 1.2s cubic-bezier(0.77, 0, 0.18, 1);
+  left: 0;
+  right: 0;
+  height: 55%;
+  transition: transform 1.4s cubic-bezier(0.77, 0, 0.18, 1);
   will-change: transform;
 }
 
-.curtain__left {
-  left: 0;
+.curtain__wash--top {
+  top: 0;
+  background: linear-gradient(
+    180deg,
+    var(--color-lavender) 0%,
+    rgba(232, 223, 240, 0.6) 30%,
+    rgba(245, 224, 224, 0.3) 60%,
+    transparent 100%
+  );
 }
 
-.curtain__right {
-  right: 0;
+.curtain__wash--bottom {
+  bottom: 0;
+  background: linear-gradient(
+    0deg,
+    var(--color-sky) 0%,
+    rgba(220, 232, 240, 0.6) 30%,
+    rgba(224, 240, 232, 0.3) 60%,
+    transparent 100%
+  );
 }
 
-.curtain.is-open .curtain__left {
-  transform: translateX(-100%);
+.curtain.is-open .curtain__wash--top {
+  transform: translateY(-100%);
 }
 
-.curtain.is-open .curtain__right {
-  transform: translateX(100%);
+.curtain.is-open .curtain__wash--bottom {
+  transform: translateY(100%);
 }
 
 .curtain.is-open .curtain__content {
   opacity: 0;
-  transform: scale(0.9);
+  transform: scale(0.92);
 }
 
 .curtain.is-hidden {
@@ -164,7 +358,7 @@ a {
   position: relative;
   z-index: 1;
   text-align: center;
-  color: var(--color-white);
+  color: var(--color-text);
   transition: opacity 0.5s ease, transform 0.5s ease;
 }
 
@@ -175,41 +369,47 @@ a {
   letter-spacing: 4px;
   text-transform: uppercase;
   margin-bottom: var(--spacing-md);
-  opacity: 0.8;
+  opacity: 0.6;
+  color: var(--color-accent-dark);
 }
 
 .curtain__names {
   font-family: var(--font-serif);
   font-size: 1.75rem;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 6px;
   margin-bottom: var(--spacing-lg);
+  color: var(--color-text);
 }
 
 .curtain__btn {
   display: inline-block;
   padding: 0.875rem 2.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  color: var(--color-white);
+  border: 1px solid var(--color-accent-light);
+  color: var(--color-accent-dark);
   font-family: var(--font-serif);
   font-size: 0.875rem;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 3px;
-  background: transparent;
+  background: rgba(255, 255, 255, 0.6);
+  border-radius: 100px;
   transition: var(--transition);
   cursor: pointer;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .curtain__btn:hover,
 .curtain__btn:focus {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: rgba(255, 255, 255, 0.8);
+  background: var(--color-accent-light);
+  color: var(--color-white);
+  border-color: var(--color-accent-light);
 }
 
 /* ═══════════════════════════════════════════
-   Falling Petals Canvas
+   Falling Sparkles Canvas
    ═══════════════════════════════════════════ */
-.petal-canvas {
+.sparkle-canvas {
   position: fixed;
   inset: 0;
   z-index: 100;
@@ -231,7 +431,7 @@ a {
   padding: 0.75rem 1.5rem;
   border-radius: 100px;
   font-size: 0.8125rem;
-  font-weight: 300;
+  font-weight: 400;
   z-index: 10000;
   opacity: 0;
   transition: opacity 0.3s ease, transform 0.3s ease;
@@ -251,7 +451,7 @@ a {
   position: fixed;
   inset: 0;
   z-index: 9000;
-  background: rgba(0, 0, 0, 0.95);
+  background: rgba(0, 0, 0, 0.92);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -329,6 +529,7 @@ a {
   max-width: 100%;
   max-height: 100%;
   object-fit: contain;
+  border-radius: var(--radius-md);
   transition: transform 0.3s ease;
 }
 
@@ -353,10 +554,14 @@ a {
 
 /* ─── Section Base ─── */
 .section {
+  position: relative;
   padding: var(--spacing-2xl) 0;
+  overflow: hidden;
 }
 
 .section__inner {
+  position: relative;
+  z-index: 1;
   max-width: 640px;
   margin: 0 auto;
   padding: 0 var(--spacing-md);
@@ -366,18 +571,10 @@ a {
 .section__title {
   font-family: var(--font-serif);
   font-size: 1.25rem;
-  font-weight: 300;
-  letter-spacing: 4px;
+  font-weight: 400;
+  letter-spacing: 3px;
   margin-bottom: var(--spacing-lg);
   color: var(--color-text);
-}
-
-/* ─── Ornament ─── */
-.ornament {
-  font-size: 1.25rem;
-  color: var(--color-accent);
-  margin-bottom: var(--spacing-md);
-  opacity: 0.6;
 }
 
 /* ═══════════════════════════════════════════
@@ -393,7 +590,7 @@ a {
   justify-content: flex-end;
   padding: 0;
   overflow: hidden;
-  background-color: #3a3228;
+  background-color: var(--color-bg);
 }
 
 .hero__overlay {
@@ -402,10 +599,10 @@ a {
   background: linear-gradient(
     to bottom,
     transparent 0%,
-    transparent 40%,
-    rgba(58, 50, 40, 0.3) 60%,
-    rgba(58, 50, 40, 0.75) 85%,
-    rgba(58, 50, 40, 0.9) 100%
+    transparent 35%,
+    rgba(253, 251, 248, 0.2) 55%,
+    rgba(253, 251, 248, 0.6) 75%,
+    rgba(253, 251, 248, 0.92) 100%
   );
   z-index: 1;
 }
@@ -423,44 +620,54 @@ a {
   position: relative;
   z-index: 2;
   text-align: center;
-  color: var(--color-white);
+  color: var(--color-text);
   padding: 0 var(--spacing-md) var(--spacing-lg);
   width: 100%;
 }
 
 .hero__label {
   font-family: var(--font-display);
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
   font-weight: 300;
   letter-spacing: 6px;
   text-transform: uppercase;
   margin-bottom: var(--spacing-sm);
-  opacity: 0.85;
+  opacity: 0.6;
+  color: var(--color-accent-dark);
 }
 
 .hero__names {
   font-family: var(--font-serif);
-  font-size: 2rem;
-  font-weight: 200;
+  font-size: 1.875rem;
+  font-weight: 700;
   letter-spacing: 8px;
   margin-bottom: var(--spacing-md);
   line-height: 1.4;
+  color: var(--color-text);
 }
 
 .hero__divider {
-  width: 40px;
-  height: 1px;
-  background: rgba(255, 255, 255, 0.5);
+  width: 50px;
+  height: 2px;
   margin: 0 auto var(--spacing-md);
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-lavender),
+    var(--color-blush),
+    var(--color-lavender),
+    transparent
+  );
 }
 
 .hero__date,
 .hero__venue {
   font-size: 0.8125rem;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 2px;
-  opacity: 0.85;
+  opacity: 0.75;
   line-height: 1.6;
+  color: var(--color-text-light);
 }
 
 .hero__venue {
@@ -473,15 +680,16 @@ a {
   z-index: 2;
   padding: var(--spacing-lg) var(--spacing-md) calc(var(--spacing-lg) + var(--safe-bottom));
   text-align: center;
-  color: var(--color-white);
+  color: var(--color-text);
 }
 
 .countdown__label {
   font-size: 0.75rem;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 3px;
-  opacity: 0.7;
+  opacity: 0.5;
   margin-bottom: var(--spacing-sm);
+  color: var(--color-accent-dark);
 }
 
 .countdown__timer {
@@ -504,13 +712,14 @@ a {
   font-weight: 300;
   line-height: 1;
   letter-spacing: 2px;
+  color: var(--color-accent-dark);
 }
 
 .countdown__unit {
   font-size: 0.625rem;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 2px;
-  opacity: 0.6;
+  opacity: 0.5;
   margin-top: 0.25rem;
 }
 
@@ -518,8 +727,9 @@ a {
   font-family: var(--font-display);
   font-size: 1.5rem;
   font-weight: 300;
-  opacity: 0.4;
+  opacity: 0.3;
   margin-top: -1rem;
+  color: var(--color-accent);
 }
 
 /* ═══════════════════════════════════════════
@@ -531,7 +741,7 @@ a {
 
 .greeting__text {
   font-size: 0.9375rem;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 2;
   color: var(--color-text-light);
   white-space: pre-line;
@@ -540,7 +750,7 @@ a {
 
 .greeting__parents {
   font-size: 0.875rem;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 2.2;
   color: var(--color-text);
   letter-spacing: 1px;
@@ -555,11 +765,11 @@ a {
 
 .greeting__parents .parent-dot {
   color: var(--color-accent);
-  font-size: 0.5rem;
+  font-size: 0.4rem;
 }
 
 .greeting__parents .child-name {
-  font-weight: 500;
+  font-weight: 700;
 }
 
 .greeting__parents .deceased::before {
@@ -572,7 +782,7 @@ a {
    Calendar Section
    ═══════════════════════════════════════════ */
 .calendar-section {
-  background-color: var(--color-bg-warm);
+  background-color: var(--color-bg-alt);
 }
 
 .calendar {
@@ -581,7 +791,7 @@ a {
   background: var(--color-bg-card);
   border-radius: var(--radius-lg);
   padding: var(--spacing-md);
-  box-shadow: 0 2px 20px rgba(0, 0, 0, 0.04);
+  box-shadow: 0 4px 24px rgba(196, 168, 212, 0.1);
 }
 
 .calendar__header {
@@ -590,7 +800,7 @@ a {
   font-weight: 400;
   letter-spacing: 2px;
   margin-bottom: var(--spacing-sm);
-  color: var(--color-text);
+  color: var(--color-accent-dark);
 }
 
 .calendar__weekdays {
@@ -609,11 +819,11 @@ a {
 }
 
 .calendar__weekday:first-child {
-  color: #c97070;
+  color: #d4a0a0;
 }
 
 .calendar__weekday:last-child {
-  color: #6a8caf;
+  color: #8eaec4;
 }
 
 .calendar__days {
@@ -626,17 +836,17 @@ a {
   text-align: center;
   padding: 0.5rem 0;
   font-size: 0.8125rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-text-light);
   position: relative;
 }
 
 .calendar__day:nth-child(7n+1) {
-  color: #c97070;
+  color: #d4a0a0;
 }
 
 .calendar__day:nth-child(7n) {
-  color: #6a8caf;
+  color: #8eaec4;
 }
 
 .calendar__day.is-empty {
@@ -646,7 +856,7 @@ a {
 .calendar__day.is-today {
   font-weight: 700;
   color: #fff;
-  background: var(--color-accent);
+  background: linear-gradient(135deg, var(--color-lavender), var(--color-accent));
   border-radius: 50%;
 }
 
@@ -666,7 +876,7 @@ a {
 
 .story__text {
   font-size: 0.9375rem;
-  font-weight: 300;
+  font-weight: 400;
   line-height: 2;
   color: var(--color-text-light);
   white-space: pre-line;
@@ -680,9 +890,10 @@ a {
 }
 
 .story__photo-item {
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   overflow: hidden;
   cursor: pointer;
+  box-shadow: 0 4px 20px rgba(232, 223, 240, 0.3);
 }
 
 .story__photo-item img {
@@ -700,13 +911,13 @@ a {
    Gallery Section
    ═══════════════════════════════════════════ */
 .gallery {
-  background-color: var(--color-bg-warm);
+  background-color: var(--color-bg-alt);
 }
 
 .gallery__grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 3px;
+  gap: 4px;
 }
 
 .gallery__item {
@@ -714,7 +925,8 @@ a {
   aspect-ratio: 1;
   overflow: hidden;
   cursor: pointer;
-  border-radius: 2px;
+  border-radius: var(--radius-sm);
+  box-shadow: 0 2px 12px rgba(232, 223, 240, 0.2);
 }
 
 .gallery__item img {
@@ -741,28 +953,28 @@ a {
 
 .location__venue {
   font-size: 1.0625rem;
-  font-weight: 500;
+  font-weight: 700;
   margin-bottom: 0.25rem;
   letter-spacing: 1px;
 }
 
 .location__hall {
   font-size: 0.875rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-text-light);
   margin-bottom: var(--spacing-xs);
 }
 
 .location__address {
   font-size: 0.8125rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-text-muted);
   line-height: 1.6;
 }
 
 .location__tel {
   font-size: 0.8125rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-text-muted);
   margin-top: 0.25rem;
 }
@@ -773,9 +985,9 @@ a {
 
 .location__map {
   margin-bottom: var(--spacing-lg);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  box-shadow: 0 2px 16px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 24px rgba(232, 223, 240, 0.25);
 }
 
 .location__map-img {
@@ -794,12 +1006,12 @@ a {
    Account Section (축의금)
    ═══════════════════════════════════════════ */
 .account {
-  background-color: var(--color-bg-warm);
+  background-color: var(--color-bg-alt);
 }
 
 .account__desc {
   font-size: 0.875rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-text-light);
   margin-bottom: var(--spacing-lg);
 }
@@ -812,6 +1024,7 @@ a {
   border-radius: var(--radius-md);
   overflow: hidden;
   background: var(--color-bg-card);
+  box-shadow: 0 2px 16px rgba(232, 223, 240, 0.12);
 }
 
 .accordion__trigger {
@@ -844,6 +1057,7 @@ a {
 .accordion__arrow {
   transition: transform var(--transition);
   flex-shrink: 0;
+  color: var(--color-accent);
 }
 
 .accordion__trigger[aria-expanded="true"] .accordion__arrow {
@@ -878,20 +1092,20 @@ a {
 
 .account-item__role {
   font-size: 0.6875rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-text-muted);
   letter-spacing: 1px;
 }
 
 .account-item__detail {
   font-size: 0.8125rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-text);
   margin-top: 0.125rem;
 }
 
 .account-item__name {
-  font-weight: 400;
+  font-weight: 700;
 }
 
 .account-item__copy {
@@ -900,7 +1114,7 @@ a {
   gap: 0.25rem;
   padding: 0.5rem 0.75rem;
   font-size: 0.75rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-accent-dark);
   border: 1px solid var(--color-accent-light);
   border-radius: 100px;
@@ -925,9 +1139,9 @@ a {
   padding: 0.75rem 1.5rem;
   font-family: var(--font-serif);
   font-size: 0.8125rem;
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 1px;
-  border-radius: var(--radius-sm);
+  border-radius: 100px;
   transition: var(--transition);
   cursor: pointer;
   line-height: 1;
@@ -941,7 +1155,8 @@ a {
 
 .btn--outline:hover {
   border-color: var(--color-accent);
-  color: var(--color-accent);
+  color: var(--color-accent-dark);
+  background: rgba(232, 223, 240, 0.2);
 }
 
 .btn--text {
@@ -960,8 +1175,7 @@ a {
   background: var(--color-kakao);
   color: #3a1d1d;
   padding: 0.75rem 1.75rem;
-  border-radius: var(--radius-sm);
-  font-weight: 400;
+  font-weight: 700;
 }
 
 .btn--kakao:hover {
@@ -972,8 +1186,7 @@ a {
   background: var(--color-naver);
   color: var(--color-white);
   padding: 0.75rem 1.75rem;
-  border-radius: var(--radius-sm);
-  font-weight: 400;
+  font-weight: 700;
 }
 
 .btn--naver:hover {
@@ -988,12 +1201,31 @@ a {
   padding-bottom: calc(var(--spacing-lg) + var(--safe-bottom));
   text-align: center;
   background: var(--color-bg);
-  border-top: 1px solid var(--color-border);
+  border-top: none;
+  position: relative;
+}
+
+.footer::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 200px;
+  height: 1px;
+  background: linear-gradient(
+    to right,
+    transparent,
+    var(--color-lavender),
+    var(--color-blush),
+    transparent
+  );
+  opacity: 0.5;
 }
 
 .footer__text {
   font-size: 0.75rem;
-  font-weight: 300;
+  font-weight: 400;
   color: var(--color-text-muted);
   letter-spacing: 2px;
 }
@@ -1077,7 +1309,7 @@ a {
   }
 
   .hero__names {
-    font-size: 2.5rem;
+    font-size: 2.25rem;
     letter-spacing: 12px;
   }
 
@@ -1095,7 +1327,11 @@ a {
   }
 
   .gallery__grid {
-    gap: 4px;
+    gap: 6px;
+  }
+
+  .gallery__item {
+    border-radius: var(--radius-md);
   }
 
   .story__photos {
@@ -1111,6 +1347,10 @@ a {
   .section__title {
     font-size: 1.375rem;
   }
+
+  .wc-divider {
+    max-width: 360px;
+  }
 }
 
 /* ═══════════════════════════════════════════
@@ -1120,7 +1360,7 @@ a {
   .main-content {
     max-width: 480px;
     margin: 0 auto;
-    box-shadow: 0 0 60px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 0 80px rgba(232, 223, 240, 0.3);
     min-height: 100vh;
   }
 
@@ -1142,19 +1382,24 @@ a {
    ═══════════════════════════════════════════ */
 @media print {
   .curtain,
-  .petal-canvas,
+  .sparkle-canvas,
   .photo-modal,
   .toast,
   .countdown,
   .calendar-actions,
   .location__links,
   .location__copy,
-  .account-item__copy {
+  .account-item__copy,
+  .wc-blob {
     display: none !important;
   }
 
   .animate-item {
     opacity: 1 !important;
     transform: none !important;
+  }
+
+  .wc-divider {
+    display: none !important;
   }
 }
