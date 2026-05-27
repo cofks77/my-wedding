@@ -1,5 +1,5 @@
 /**
- * Watercolor Soft Wedding Invitation
+ * Classic Elegant Wedding Invitation
  * Korean Mobile 청첩장 - Script
  */
 
@@ -122,7 +122,7 @@
   }
 
   /* ═══════════════════════════════════════════
-     Curtain (Watercolor Wash)
+     Curtain
      ═══════════════════════════════════════════ */
 
   function initCurtain() {
@@ -130,9 +130,10 @@
     const btn = $('#curtainBtn');
     const namesEl = $('#curtainNames');
 
+    // If useCurtain is false, skip the curtain entirely
     if (CONFIG.useCurtain === false) {
       curtain.style.display = 'none';
-      initSparkles();
+      initPetals();
       return;
     }
 
@@ -143,7 +144,7 @@
       document.body.classList.remove('no-scroll');
       setTimeout(() => {
         curtain.classList.add('is-hidden');
-        initSparkles();
+        initPetals();
       }, 1400);
     });
 
@@ -151,25 +152,16 @@
   }
 
   /* ═══════════════════════════════════════════
-     Falling Pastel Confetti / Sparkles
+     Falling Petals
      ═══════════════════════════════════════════ */
 
-  function initSparkles() {
-    const canvas = $('#sparkleCanvas');
+  function initPetals() {
+    const canvas = $('#petalCanvas');
     if (!canvas) return;
     const ctx = canvas.getContext('2d');
     let width, height;
-    const particles = [];
-    const PARTICLE_COUNT = 30;
-
-    const colors = [
-      'rgba(232, 223, 240, 0.6)',  // lavender
-      'rgba(245, 224, 224, 0.6)',  // blush
-      'rgba(220, 232, 240, 0.55)', // sky
-      'rgba(224, 240, 232, 0.55)', // mint
-      'rgba(196, 168, 212, 0.4)',  // accent
-      'rgba(255, 255, 255, 0.7)'   // white sparkle
-    ];
+    const petals = [];
+    const PETAL_COUNT = 25;
 
     function resize() {
       width = canvas.width = window.innerWidth;
@@ -179,7 +171,7 @@
     resize();
     window.addEventListener('resize', resize);
 
-    class Particle {
+    class Petal {
       constructor() {
         this.reset(true);
       }
@@ -187,25 +179,22 @@
       reset(initial = false) {
         this.x = Math.random() * width;
         this.y = initial ? Math.random() * height * -1 : -20;
-        this.size = 3 + Math.random() * 6;
-        this.speedY = 0.3 + Math.random() * 0.8;
-        this.speedX = -0.2 + Math.random() * 0.4;
+        this.size = 8 + Math.random() * 10;
+        this.speedY = 0.5 + Math.random() * 1;
+        this.speedX = -0.3 + Math.random() * 0.6;
         this.rotation = Math.random() * Math.PI * 2;
-        this.rotSpeed = (Math.random() - 0.5) * 0.03;
-        this.oscillateAmp = 15 + Math.random() * 25;
-        this.oscillateSpeed = 0.008 + Math.random() * 0.015;
+        this.rotSpeed = (Math.random() - 0.5) * 0.02;
+        this.oscillateAmp = 20 + Math.random() * 30;
+        this.oscillateSpeed = 0.01 + Math.random() * 0.02;
         this.oscillateOffset = Math.random() * Math.PI * 2;
-        this.opacity = 0.3 + Math.random() * 0.5;
-        this.color = colors[Math.floor(Math.random() * colors.length)];
+        this.opacity = 0.2 + Math.random() * 0.4;
         this.t = 0;
-        // 0 = circle confetti, 1 = sparkle star, 2 = soft blob
-        this.type = Math.floor(Math.random() * 3);
       }
 
       update() {
         this.t++;
         this.y += this.speedY;
-        this.x += this.speedX + Math.sin(this.t * this.oscillateSpeed + this.oscillateOffset) * 0.4;
+        this.x += this.speedX + Math.sin(this.t * this.oscillateSpeed + this.oscillateOffset) * 0.5;
         this.rotation += this.rotSpeed;
         if (this.y > height + 20) this.reset();
       }
@@ -215,45 +204,32 @@
         ctx.translate(this.x, this.y);
         ctx.rotate(this.rotation);
         ctx.globalAlpha = this.opacity;
-
-        if (this.type === 0) {
-          // Circle confetti
-          ctx.fillStyle = this.color;
-          ctx.beginPath();
-          ctx.ellipse(0, 0, this.size, this.size * 0.6, 0, 0, Math.PI * 2);
-          ctx.fill();
-        } else if (this.type === 1) {
-          // Sparkle star (4-point)
-          ctx.fillStyle = this.color;
-          ctx.beginPath();
-          const s = this.size * 0.8;
-          for (let i = 0; i < 4; i++) {
-            const angle = (i * Math.PI) / 2;
-            ctx.lineTo(Math.cos(angle) * s, Math.sin(angle) * s);
-            const midAngle = angle + Math.PI / 4;
-            ctx.lineTo(Math.cos(midAngle) * s * 0.3, Math.sin(midAngle) * s * 0.3);
-          }
-          ctx.closePath();
-          ctx.fill();
-        } else {
-          // Soft blob
-          ctx.fillStyle = this.color;
-          ctx.beginPath();
-          ctx.arc(0, 0, this.size * 0.7, 0, Math.PI * 2);
-          ctx.fill();
-        }
-
+        ctx.fillStyle = '#e8c8b0';
+        ctx.beginPath();
+        // Petal shape
+        ctx.moveTo(0, 0);
+        ctx.bezierCurveTo(
+          this.size * 0.3, -this.size * 0.4,
+          this.size * 0.7, -this.size * 0.5,
+          this.size, 0
+        );
+        ctx.bezierCurveTo(
+          this.size * 0.7, this.size * 0.3,
+          this.size * 0.3, this.size * 0.3,
+          0, 0
+        );
+        ctx.fill();
         ctx.restore();
       }
     }
 
-    for (let i = 0; i < PARTICLE_COUNT; i++) {
-      particles.push(new Particle());
+    for (let i = 0; i < PETAL_COUNT; i++) {
+      petals.push(new Petal());
     }
 
     function animate() {
       ctx.clearRect(0, 0, width, height);
-      particles.forEach(p => {
+      petals.forEach(p => {
         p.update();
         p.draw();
       });
@@ -359,10 +335,12 @@
 
     const grid = $('#calendarGrid');
 
+    // Header
     const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December'];
     grid.innerHTML = `<div class="calendar__header">${monthNames[month]} ${year}</div>`;
 
+    // Weekdays
     const weekdays = ['일', '월', '화', '수', '목', '금', '토'];
     const wdRow = document.createElement('div');
     wdRow.className = 'calendar__weekdays';
@@ -374,6 +352,7 @@
     });
     grid.appendChild(wdRow);
 
+    // Days
     const daysContainer = document.createElement('div');
     daysContainer.className = 'calendar__days';
 
@@ -403,7 +382,7 @@
     const gcalUrl = `https://calendar.google.com/calendar/render?action=TEMPLATE&text=${encodeURIComponent(CONFIG.groom.name + ' ♥ ' + CONFIG.bride.name + ' 결혼식')}&dates=${startDate}/${endDate}&location=${encodeURIComponent(CONFIG.wedding.venue + ' ' + CONFIG.wedding.address)}&details=${encodeURIComponent('결혼식에 초대합니다.')}`;
     $('#googleCalBtn').href = gcalUrl;
 
-    // ICS download (Apple Calendar)
+    // ICS download
     $('#icsDownloadBtn').addEventListener('click', () => {
       const icsContent = [
         'BEGIN:VCALENDAR',
@@ -439,6 +418,7 @@
     $('#storyContent').textContent = CONFIG.story.content;
 
     const container = $('#storyPhotos');
+    // Remove loading placeholder if present
     const placeholder = container.querySelector('.loading-placeholder');
     if (placeholder) placeholder.remove();
 
@@ -460,10 +440,12 @@
 
   function initGallery(galleryImages) {
     const grid = $('#galleryGrid');
+    // Remove loading placeholder if present
     const placeholder = grid.querySelector('.loading-placeholder');
     if (placeholder) placeholder.remove();
 
     if (galleryImages.length === 0) {
+      // Hide gallery section if no images found
       const gallerySection = $('#gallery');
       if (gallerySection) gallerySection.style.display = 'none';
       return;
@@ -563,9 +545,9 @@
     if (Math.abs(diffX) < minSwipe || Math.abs(diffX) < Math.abs(diffY)) return;
 
     if (diffX > 0) {
-      modalNavigate(1);
+      modalNavigate(1); // swipe left -> next
     } else {
-      modalNavigate(-1);
+      modalNavigate(-1); // swipe right -> prev
     }
   }
 
@@ -575,14 +557,13 @@
 
   function initLocation() {
     const w = CONFIG.wedding;
-    const ml = CONFIG.mapLinks;
     $('#locationVenue').textContent = w.venue;
     $('#locationHall').textContent = w.hall;
     $('#locationAddress').textContent = w.address;
     $('#locationTel').textContent = w.tel ? `Tel. ${w.tel}` : '';
     $('#locationMapImg').src = 'images/location/1.jpg';
-    $('#kakaoMapBtn').href = ml.kakao || '#';
-    $('#naverMapBtn').href = ml.naver || '#';
+    $('#kakaoMapBtn').href = w.mapLinks.kakao || '#';
+    $('#naverMapBtn').href = w.mapLinks.naver || '#';
 
     $('#copyAddressBtn').addEventListener('click', () => {
       copyToClipboard(w.address, '주소가 복사되었습니다');
@@ -692,9 +673,10 @@
       }
     );
 
+    // Observe initial static items
     $$('.animate-item').forEach((el) => observer.observe(el));
 
-    // Re-observe after dynamic content is added
+    // Re-observe after dynamic content is added (MutationObserver)
     const mutObs = new MutationObserver((mutations) => {
       mutations.forEach((m) => {
         m.addedNodes.forEach((node) => {
@@ -724,22 +706,27 @@
     initGreeting();
     initCalendar();
 
+    // Show loading placeholders while detecting images
     showLoadingPlaceholders();
 
+    // Init sections that don't depend on image detection
     initPhotoModal();
     initLocation();
     initAccounts();
     initFooter();
     initScrollAnimations();
 
+    // Set story text immediately (photos load async)
     $('#storyTitle').textContent = CONFIG.story.title;
     $('#storyContent').textContent = CONFIG.story.content;
 
+    // Auto-detect story and gallery images in parallel
     const [storyImages, galleryImages] = await Promise.all([
       loadImagesFromFolder('story'),
       loadImagesFromFolder('gallery')
     ]);
 
+    // Render sections with discovered images
     initStory(storyImages);
     initGallery(galleryImages);
   }
