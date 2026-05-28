@@ -5,11 +5,11 @@
  * 이미지는 설정이 필요 없습니다. 아래 폴더에 순번 파일명으로 넣으면 자동 감지됩니다.
  *
  * 이미지 폴더 구조 (파일명 규칙):
- *   images/hero/1.jpg      - 메인 사진 (1장, 필수)
- *   images/story/1.jpg, 2.jpg, ...  - 스토리 사진들 (순번, 자동 감지)
- *   images/gallery/1.jpg, 2.jpg, ... - 갤러리 사진들 (순번, 자동 감지)
- *   images/location/1.jpg  - 약도/지도 이미지 (1장)
- *   images/og/1.jpg        - 카카오톡 공유 썸네일 (1장)
+ * images/hero/1.jpg      - 메인 사진 (1장, 필수)
+ * images/story/1.jpg, 2.jpg, ...  - 스토리 사진들 (순번, 자동 감지)
+ * images/gallery/1.jpg, 2.jpg, ... - 갤러리 사진들 (순번, 자동 감지)
+ * images/location/1.jpg  - 약도/지도 이미지 (1장)
+ * images/og/1.jpg        - 카카오톡 공유 썸네일 (1장)
  */
 
 const CONFIG = {
@@ -40,14 +40,14 @@ const CONFIG = {
     time: "15:30",
     venue: "아펠가모 잠실",
     hall: "웨딩홀 2층",
-    address: "서울특별시 송파구 올림픽로 35길 137(신천동) 2층",
+    address: "서울특별시 송파구 올림픽로 35길 137(신천동)         한국광고문화회관 2층",
     tel: "02-2144-0230"
   },
 
   // ── 3. 인사말 ──
   greeting: {
     title: "저희의 첫 계절을 축복해주세요",
-    content: "당신과의 사계는\n\n봄처럼 새로운 세상이 피어나고\n\여름처럼 찬란히 빛날 것입니다.\n모든 것이 깊어지는 가을이 지나면\n고요히 잠이 드는 겨울도 오겠지요\n\n우리는 서로의 시작과 끝\n모든 순간을 함께할 것 입니다."
+    content: "당신과의 사계는\n\n봄처럼 새로운 세상이 피어나고\n여름처럼 찬란히 빛날 것입니다.\n모든 것이 깊어지는 가을이 지나면\n고요히 잠이 드는 겨울도 오겠지요\n\n우리는 서로의 시작과 끝\n모든 순간을 함께할 것 입니다."
   },
 
   // ── 4. 우리의 이야기 ──
@@ -65,15 +65,71 @@ const CONFIG = {
   // ── 6. 마음 전하실 곳 ──
   accounts: {
     groom: [
-      { role: "신랑", name: "최재성", bank: "국민은행", number: "000-000-000000" },
-      { role: "아버지", name: "김철수", bank: "신한은행", number: "000-000-000000" },
-      { role: "어머니", name: "문경자", bank: "우리은행", number: "000-000-000000" }
+      { role: "신랑", name: "최재성", bank: "신한은행", number: "110-280-968042" },
+      { role: "어머니", name: "문경자", bank: "국민은행", number: "920301-01-005295" }
     ],
     bride: [
       { role: "신부", name: "박채란", bank: "우리은행", number: "1002-052-730160" },
       { role: "아버지", name: "박진", bank: "토스뱅크", number: "1000-4415-2234" },
       { role: "어머니", name: "이영순", bank: "신한은행", number: "110-061-416741" }
-    ]
+    ] // 👈 닫는 대괄호 추가 및 구조 교정
+  },
+
+  // ── 7. 참석 여부 설정 (구글 스프레드시트 직접 연동) ──
+  attendance: {
+    title: "참석 여부 전달하기",
+    description: "신랑 신부에게 참석 여부를 미리 알려주시면\n원활한 예식 준비에 큰 도움이 됩니다.",
+    
+    // 복사해주신 구글 앱스 스크립트 웹 앱 주소를 정상 적용했습니다.
+    googleSheetUrl: "https://script.google.com/macros/s/AKfycbx8DB7dU-w0n5g2Zg07q_8nnj5FpcGCnM6QLzifUy29Ny2MW89158ZUy8tZ1XsCj_Uf/exec",
+
+    // UI 렌더링용 라벨 및 옵션 설정
+    labels: {
+      name: "성함",
+      status: "참석 여부",
+      meal: "식사 여부",
+      companion: "동반 인원 (본인 포함)",
+      message: "축하 메시지"
+    },
+    options: {
+      status: ["참석", "미참석", "미정"],
+      meal: ["식사함", "식사 안 함", "미정"],
+      companion: ["1명", "2명", "3명", "4명", "5명 이상"]
+    }
+  },
+
+  // ── 8. 구글 스프레드시트로 직접 데이터를 전송하는 함수 ──
+  submitAttendance: function(data) {
+    const targetUrl = this.attendance.googleSheetUrl;
+    
+    // 일반적인 JSON 형태로 전송하기 위해 URLSearchParams 구성
+    const formData = new URLSearchParams();
+    formData.append("name", data.name);
+    formData.append("status", data.status);
+    formData.append("meal", data.meal);
+    formData.append("companion", data.companion);
+    formData.append("message", data.message);
+
+    // 구글 앱스 스크립트로 POST 전송
+    return fetch(targetUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formData.toString()
+    })
+    .then(response => response.json())
+    .then(result => {
+      if (result.result === "success") {
+        alert("참석 여부와 축하 메시지가 구글 시트에 안전하게 기록되었습니다! 🤍");
+        return true;
+      } else {
+        throw new Error(result.error);
+      }
+    })
+    .catch((error) => {
+      console.error("전송 실패:", error);
+      alert("오류가 발생했습니다. 다시 시도해 주세요.");
+      return false;
+    });
   },
 
   // ── 링크 공유 시 나타나는 문구 ──
