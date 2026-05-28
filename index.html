@@ -278,122 +278,145 @@
 </div>
     
    <script>
-  var form = document.getElementById('rsvp-form');
-  var sheetDbUrl = form.action; // form 태그에 넣으신 SheetDB 주소를 자동으로 가져옵니다.
+  (function() {
+    var form = document.getElementById('rsvp-form');
+    var sheetDbUrl = form.getAttribute('action'); 
 
-  // [기능 1] 구글 시트에서 데이터를 가져와 화면에 댓글로 뿌려주는 함수
-  function loadMessages() {
-    var messageList = document.getElementById('message-list');
-    var loadingDiv = document.getElementById('loading-messages');
+    // [기능 1] 댓글 불러오기 함수
+    function loadMessages() {
+      var messageList = document.getElementById('message-list');
+      var loadingDiv = document.getElementById('loading-messages');
 
-    // 최신 메시지가 위로 오게 하려면 SheetDB 주소 뒤에 ?sort_by=name&sort_order=desc 등을 쓸 수 있지만, 
-    // 여기서는 기본으로 가져온 뒤 자바스크립트로 역순(최신순) 정렬하겠습니다.
-    fetch(sheetDbUrl)
-      .then(function(response) { return response.json(); })
-      .then(function(data) {
-        loadingDiv.style.display = 'none'; // 로딩 메시지 숨기기
-        messageList.innerHTML = ''; // 기존 리스트 초기화
+      if (!sheetDbUrl || sheetDbUrl.includes('여기에_SheetDB')) {
+        loadingDiv.innerText = 'SheetDB 주소가 세팅되지 않았습니다.';
+        return;
+      }
 
-        if (!data || data.length === 0) {
-          messageList.innerHTML = '<div style="text-align:center; color:#ccc; font-size:14px; padding:20px;">첫 번째 축하 메시지를 남겨보세요!</div>';
-          return;
-        }
+      fetch(sheetDbUrl)
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          loadingDiv.style.display = 'none';
+          messageList.innerHTML = '';
 
-        // 배열을 역순으로 뒤집어서 최신 댓글이 맨 위에 오도록 함
-        data.reverse().forEach(function(item) {
-          // 메시지가 없는 참석 여부만 보낸 데이터는 방명록에서 제외
-          if (!item.message || item.message.trim() === '') return;
+          if (!data || data.length === 0 || data.error) {
+            messageList.innerHTML = '<div style="text-align:center; color:#ccc; font-size:14px; padding:20px;">첫 번째 축하 메시지를 남겨보세요!</div>';
+            return;
+          }
 
-          // 댓글 상자 만들기
-          var msgCard = document.createElement('div');
-          msgCard.style.background = '#fcfaf7';
-          msgCard.style.padding = '15px';
-          msgCard.style.borderRadius = '8px';
-          msgCard.style.border = '1px solid #f0e9e1';
-          msgCard.style.boxShadow = '0 1px 3px rgba(0,0,0,0.02)';
+          var validCount = 0;
+          data.slice().reverse().forEach(function(item) {
+            if (!item.message || item.message.trim() === '') return;
+            validCount++;
 
-          // 이름 및 구분 표시 (예: 김철수 (신랑측))
-          var infoArea = document.createElement('div');
-          infoArea.style.display = 'flex';
-          infoArea.style.justifyContent = 'space-between';
-          infoArea.style.marginBottom = '8px';
-          infoArea.style.fontSize = '13px';
-          
-          var nameSpan = document.createElement('span');
-          nameSpan.style.fontWeight = 'bold';
-          nameSpan.style.color = '#555';
-          nameSpan.innerText = item.name + ' (' + (item.side || '참석자') + ')';
+            var msgCard = document.createElement('div');
+            msgCard.style.cssText = 'background:#fcfaf7; padding:15px; border-radius:8px; border:1px solid #f0e9e1; margin-bottom:10px;';
 
-          var attendSpan = document.createElement('span');
-          attendSpan.style.color = item.attend === '참석' ? '#2ecc71' : '#95a5a6';
-          attendSpan.style.fontSize = '11px';
-          attendSpan.innerText = item.attend === '참석' ? '♥ 참석' : '마음으로 축하';
+            var infoArea = document.createElement('div');
+            infoArea.style.cssText = 'display:flex; justify-content:space-between; margin-bottom:8px; font-size:13px;';
+            
+            var nameSpan = document.createElement('span');
+            nameSpan.style.fontWeight = 'bold';
+            nameSpan.style.color = '#555';
+            
+            // 데이터가 비어있을 경우를 대비한 방어 코드
+            var displaySide = item.side ? item.side : '미지정';
+            var displayAttend = item.attend ? item.attend : '확인불가';
+            
+            nameSpan.innerText = item.name + ' (' + displaySide + ')';
 
-          infoArea.appendChild(nameSpan);
-          infoArea.appendChild(attendSpan);
+            var attendSpan = document.createElement('span');
+            attendSpan.style.color = displayAttend === '참석' ? '#2ecc71' : '#95a5a6';
+            attendSpan.style.fontSize = '11px';
+            attendSpan.innerText = displayAttend === '참석' ? '♥ 참석' : '마음으로 축하';
 
-          // 메시지 본문
-          var contentArea = document.createElement('div');
-          contentArea.style.fontSize = '14px';
-          contentArea.style.color = '#333';
-          contentArea.style.lineHeight = '1.5';
-          contentArea.style.whiteSpace = 'pre-wrap'; // 줄바꿈 적용
-          contentArea.innerText = item.message;
+            infoArea.appendChild(nameSpan);
+            infoArea.appendChild(attendSpan);
 
-          msgCard.appendChild(infoArea);
-          msgCard.appendChild(contentArea);
-          messageList.appendChild(msgCard);
+            var contentArea = document.createElement('div');
+            contentArea.style.cssText = 'font-size:14px; color:#333; line-height:1.5; white-space:pre-wrap;';
+            contentArea.innerText = item.message;
+
+            msgCard.appendChild(infoArea);
+            msgCard.appendChild(contentArea);
+            messageList.appendChild(msgCard);
+          });
+
+          if (validCount === 0) {
+            messageList.innerHTML = '<div style="text-align:center; color:#ccc; font-size:14px; padding:20px;">첫 번째 축하 메시지를 남겨보세요!</div>';
+          }
+        })
+        .catch(function(err) {
+          console.error(err);
+          loadingDiv.innerText = '메시지를 불러오지 못했습니다.';
         });
-      })
-      .catch(function(error) {
-        console.error('메시지 로딩 실패:', error);
-        loadingDiv.innerText = '메시지를 불러오는 중 오류가 발생했습니다.';
-      });
-  }
+    }
 
-  // 페이지가 로드되면 자동으로 댓글 불러오기 실행
-  window.addEventListener('DOMContentLoaded', loadMessages);
+    // 초기 로딩 실행
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadMessages);
+    } else {
+      loadMessages();
+    }
 
+    // [기능 2] 폼 제출 처리 (라디오 버튼 추출 방식 개선)
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
 
-  // [기능 2] 하객이 폼을 제출할 때 작동하는 코드
-  form.addEventListener("submit", function(e) {
-    e.preventDefault(); 
-    
-    var submitBtn = form.querySelector('button[type="submit"]');
-    submitBtn.disabled = true;
-    submitBtn.innerText = '전송 중...';
+      var submitBtn = document.getElementById('submit-btn');
+      submitBtn.disabled = true;
+      submitBtn.innerText = '전송 중...';
 
-    var formData = {
-      name: document.getElementById('name').value,
-      side: form.querySelector('input[name="side"]:checked')?.value || '',
-      attend: form.querySelector('input[name="attend"]:checked')?.value || '',
-      meal: form.querySelector('input[name="meal"]:checked')?.value || '',
-      guests: document.getElementById('guests').value,
-      message: document.getElementById('message').value
-    };
+      // 가장 안전한 표준 방식으로 라디오 버튼 값 매칭
+      var sideValue = form.elements['side'].value;
+      var attendValue = form.elements['attend'].value;
+      var mealValue = form.elements['meal'].value;
 
-    fetch(sheetDbUrl, {
-        method : "POST",
+      var formData = {
+        name: document.getElementById('name').value,
+        side: sideValue,
+        attend: attendValue,
+        meal: mealValue,
+        guests: document.getElementById('guests').value,
+        message: document.getElementById('message').value
+      };
+
+      // [💡 중간 검증 부품] 데이터가 제대로 묶였는지 브라우저 알림창으로 실시간 확인
+      // 이 알림창에서 side, attend 등이 잘 보이나 확인해 주세요!
+      alert(
+        "[전송 데이터 전출 확인]\n" +
+        "이름: " + formData.name + "\n" +
+        "구분: " + formData.side + "\n" +
+        "참석: " + formData.attend + "\n" +
+        "식사: " + formData.meal + "\n" +
+        "인원: " + formData.guests + "\n" +
+        "메시지: " + formData.message
+      );
+
+      fetch(sheetDbUrl, {
+        method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify([formData]),
-    }).then(function(response) {
-        if(response.ok) return response.json();
-        throw new Error('네트워크 에러');
-    }).then(function(html) {
-        alert('참석 의사와 메시지가 소중히 전달되었습니다. 감사합니다! 💕');
-        form.reset(); // 입력창 비우기
+        body: JSON.stringify([formData])
+      })
+      .then(function(res) {
+        if (res.ok) return res.json();
+        throw new Error('전송 실패');
+      })
+      .then(function() {
+        alert('참석 의사가 구글 시트에 기록되었습니다! 💕');
+        form.reset();
         submitBtn.disabled = false;
         submitBtn.innerText = '의사 전달하기';
-        
-        // 중요: 등록이 성공하면 구글 시트에서 데이터를 다시 읽어와 방명록을 갱신합니다!
-        loadMessages();
-    }).catch(function(error) {
-        alert('전송 중 오류가 발생했습니다. 다시 시도해 주세요.');
+        loadMessages(); // 댓글 갱신
+      })
+      .catch(function(err) {
+        alert('구글 시트 전송에 실패했습니다. 대시보드 설정을 확인하세요.');
         submitBtn.disabled = false;
         submitBtn.innerText = '의사 전달하기';
+      });
     });
-  });
+  })();
 </script>
+
 
     <!-- ─── Footer ─── -->
     <footer class="footer">
