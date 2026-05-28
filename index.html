@@ -271,14 +271,14 @@
 <script>
   (function() {
     var form = document.getElementById('rsvp-form');
-    var sheetDbUrl = form.getAttribute('action');
+    var sheetDbUrl = 'https://sheetdb.io/api/v1/z8xo2l6tovpa1';
 
     function loadMessages() {
       var messageList = document.getElementById('message-list');
       var loadingDiv = document.getElementById('loading-messages');
 
-      if (!sheetDbUrl || sheetDbUrl.includes('여기에_SheetDB')) {
-        loadingDiv.innerText = '설정: SheetDB API 주소를 삽입해 주세요.';
+      if (!sheetDbUrl) {
+        loadingDiv.innerText = '설정: sheetDB';
         return;
       }
 
