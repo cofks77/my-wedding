@@ -212,7 +212,7 @@
   <h2 style="margin-bottom: 8px; color: #4a4a4a; font-size: 20px; font-weight: 500; letter-spacing: -0.5px;">참석 의사 전달하기</h2>
   <p style="font-size: 13px; color: #888; margin-bottom: 30px; line-height: 1.6;">원활한 예식 준비를 위해<br>참석 여부를 미리 알려주시면 감사하겠습니다.</p>
   
-  <form id="rsvp-form" action="여기에_SheetDB_발급_주소를_넣으세요" method="POST" style="text-align: left; background: #faf8f5; padding: 25px 20px; border-radius: 12px; border: 1px solid #f0eae1; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
+  <form id="rsvp-form" action="https://sheetdb.io/api/v1/z8xo2l6tovpa1" method="POST" style="text-align: left; background: #faf8f5; padding: 25px 20px; border-radius: 12px; border: 1px solid #f0eae1; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
     
     <div style="margin-bottom: 20px;">
       <label for="rsvp-name" style="display:block; margin-bottom:8px; font-weight:600; font-size:14px; color:#555;">성함</label>
@@ -258,7 +258,7 @@
       <textarea id="rsvp-message" name="message" rows="3" placeholder="축하의 한마디를 남겨주세요 (방명록에 노출됩니다)" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; box-sizing: border-box; resize: none; font-size: 14px; line-height: 1.5; -webkit-appearance: none;"></textarea>
     </div>
 
-    <button type="submit" id="rsvp-submit-btn" style="width:100%; padding:14px; background-color: #c2b09b; color:#fff; border:none; border-radius:6px; font-size:15px; cursor:pointer; font-weight:bold; letter-spacing: 0.5px; transition: background 0.2s;">의사 전달하기</button>
+    <button type="submit" id="rsvp-submit-btn" style="width:100%; padding:14px; background-color: #c2b09b; color:#fff; border:none; border-radius:6px; font-size:15px; cursor:pointer; font-weight:bold; letter-spacing: 0.5px;">의사 전달하기</button>
   </form>
 
   <div class="guestbook-section" style="margin-top: 50px; text-align: left;">
@@ -273,13 +273,12 @@
     var form = document.getElementById('rsvp-form');
     var sheetDbUrl = form.getAttribute('action');
 
-    // [기능 1] 구글 시트 데이터 불러와서 화면에 실시간 노출
     function loadMessages() {
       var messageList = document.getElementById('message-list');
       var loadingDiv = document.getElementById('loading-messages');
 
       if (!sheetDbUrl || sheetDbUrl.includes('여기에_SheetDB')) {
-        loadingDiv.innerText = 'https://sheetdb.io/api/v1/jgmlsvtnqcytz';
+        loadingDiv.innerText = '설정: SheetDB API 주소를 삽입해 주세요.';
         return;
       }
 
@@ -289,21 +288,18 @@
           loadingDiv.style.display = 'none';
           messageList.innerHTML = '';
 
-          // 예외 처리 및 빈 데이터 검사
           if (!data || data.length === 0 || data.error) {
             messageList.innerHTML = '<div style="text-align:center; color:#bbb; font-size:13px; padding:30px 0;">첫 번째 축하 메시지의 주인공이 되어보세요!</div>';
             return;
           }
 
           var validMessageCount = 0;
-          // 배열을 카피한 뒤 최신순(역순)으로 순회
           data.slice().reverse().forEach(function(item) {
-            // 메시지 알맹이가 비어있는 단순 참석 체크건은 방명록 리스트에서 제외
             if (!item.message || item.message.trim() === '') return;
             validMessageCount++;
 
             var card = document.createElement('div');
-            card.style.cssText = 'background:#fdfcfb; padding:16px; border-radius:10px; border:1px solid #ede6dc; box-shadow: 0 2px 5px rgba(0,0,0,0.01);';
+            card.style.cssText = 'background:#fdfcfb; padding:16px; border-radius:10px; border:1px solid #ede6dc;';
 
             var topRow = document.createElement('div');
             topRow.style.cssText = 'display:flex; justify-content:space-between; margin-bottom:10px; font-size:13px;';
@@ -311,9 +307,7 @@
             var nameInfo = document.createElement('span');
             nameInfo.style.fontWeight = 'bold';
             nameInfo.style.color = '#555';
-            // 값이 유실되었을 경우의 안전장치
-            var sideText = item.side ? item.side : '하객';
-            nameInfo.innerText = item.name + ' (' + sideText + ')';
+            nameInfo.innerText = item.name + ' (' + (item.side || '하객') + ')';
 
             var attendTag = document.createElement('span');
             var isAttend = (item.attend === '참석');
@@ -340,46 +334,36 @@
         })
         .catch(function(err) {
           console.error(err);
-          loadingDiv.innerText = '방명록을 불러오는 중 연결 오류가 발생했습니다.';
+          loadingDiv.innerText = '방명록을 불러오는 중 오류가 발생했습니다.';
         });
     }
 
-    // 문서 로드 시 최초 실행
     if (document.readyState === 'loading') {
       document.addEventListener('DOMContentLoaded', loadMessages);
     } else {
       loadMessages();
     }
 
-    // [기능 2] 데이터 안전하게 전송하기
     form.addEventListener('submit', function(e) {
       e.preventDefault();
 
       var btn = document.getElementById('rsvp-submit-btn');
       btn.disabled = true;
-      btn.style.backgroundColor = '#d9cbdc';
-      btn.innerText = '소중한 정보 전송 중...';
+      btn.innerText = '전송 중...';
 
-      // 요소 선택 안정화 (템플릿 내 충돌 방지용 순수 API 구현)
-      var nameVal = document.getElementById('rsvp-name').value;
-      var messageVal = document.getElementById('rsvp-message').value;
-      var guestsVal = document.getElementById('rsvp-guests').value;
-      
-      // 모바일 브라우저 라디오 선택 값 완벽 방어 코드
       var sideActive = form.querySelector('input[name="side"]:checked');
       var attendActive = form.querySelector('input[name="attend"]:checked');
       var mealActive = form.querySelector('input[name="meal"]:checked');
 
       var payload = {
-        name: nameVal,
+        name: document.getElementById('rsvp-name').value,
         side: sideActive ? sideActive.value : '신랑측',
         attend: attendActive ? attendActive.value : '참석',
         meal: mealActive ? mealActive.value : '식사함',
-        guests: guestsVal,
-        message: messageVal
+        guests: document.getElementById('rsvp-guests').value,
+        message: document.getElementById('rsvp-message').value
       };
 
-      // API 서버로 JSON 데이터 푸시
       fetch(sheetDbUrl, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -390,17 +374,15 @@
         throw new Error('전송오류');
       })
       .then(function() {
-        alert('참석 의사와 소중한 말씀이 신랑 신부에게 안전하게 전달되었습니다. 감사합니다! 💕');
+        alert('참석 의사가 안전하게 전달되었습니다. 감사합니다! 💕');
         form.reset();
         btn.disabled = false;
-        btn.style.backgroundColor = '#c2b09b';
         btn.innerText = '의사 전달하기';
-        loadMessages(); // 즉시 새로고침 없이 아래 템플릿 리스트 최신화
+        loadMessages(); 
       })
       .catch(function(err) {
-        alert('데이터 전송에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+        alert('전송에 실패했습니다. 구글 시트 공유 권한(편집자)을 확인해 주세요.');
         btn.disabled = false;
-        btn.style.backgroundColor = '#c2b09b';
         btn.innerText = '의사 전달하기';
       });
     });
