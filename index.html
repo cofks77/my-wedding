@@ -206,18 +206,6 @@
       </div>
     </section>
 
-    <!-- 축하 메시지 리스트 공간 -->
-<div class="guestbook-section" style="margin-top: 40px; max-width: 500px; margin-left: auto; margin-right: auto; text-align: left;">
-  <h3 style="text-align: center; font-size: 18px; color: #333; margin-bottom: 20px;">축하의 한마디 💕</h3>
-  
-  <!-- 로딩 표시 (데이터를 불러오는 동안 보여집니다) -->
-  <div id="loading-messages" style="text-align: center; color: #999; font-size: 14px; padding: 20px;">
-    메시지를 불러오는 중입니다...
-  </div>
-
-  <!-- 여기에 댓글들이 동적으로 추가됩니다 -->
-  <div id="message-list" style="display: flex; flex-direction: column; gap: 15px;"></div>
-</div>
     
     <!-- 참석여부 섹션 시작 -->
 <section class="rsvp-section" style="padding: 40px 20px; text-align: center; max-width: 500px; margin: 0 auto;">
@@ -275,6 +263,19 @@
   </form>
 </section>
 <!-- 참석여부 섹션 끝 -->
+
+   <!-- 축하 메시지 리스트 공간 -->
+<div class="guestbook-section" style="margin-top: 40px; max-width: 500px; margin-left: auto; margin-right: auto; text-align: left;">
+  <h3 style="text-align: center; font-size: 18px; color: #333; margin-bottom: 20px;">축하의 한마디 💕</h3>
+  
+  <!-- 로딩 표시 (데이터를 불러오는 동안 보여집니다) -->
+  <div id="loading-messages" style="text-align: center; color: #999; font-size: 14px; padding: 20px;">
+    메시지를 불러오는 중입니다...
+  </div>
+
+  <!-- 여기에 댓글들이 동적으로 추가됩니다 -->
+  <div id="message-list" style="display: flex; flex-direction: column; gap: 15px;"></div>
+</div>
     
    <script>
   var form = document.getElementById('rsvp-form');
