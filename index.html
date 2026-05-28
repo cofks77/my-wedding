@@ -208,44 +208,44 @@
 
     
     <!-- 참석여부 섹션 시작 -->
-<section class="rsvp-section" style="padding: 40px 20px; text-align: center; max-width: 500px; margin: 0 auto;">
-  <h2 style="font-family: inherit; margin-bottom: 20px; color: #333;">참석 의사 전달하기</h2>
-  <p style="font-size: 14px; color: #666; margin-bottom: 30px;">원활한 예식 준비를 위해 참석 여부를 알려주시면 감사하겠습니다.</p>
+<section class="rsvp-section" style="padding: 50px 20px; text-align: center; max-width: 450px; margin: 0 auto; font-family: -apple-system, BlinkMacSystemFont, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;">
+  <h2 style="margin-bottom: 8px; color: #4a4a4a; font-size: 20px; font-weight: 500; letter-spacing: -0.5px;">참석 의사 전달하기</h2>
+  <p style="font-size: 13px; color: #888; margin-bottom: 30px; line-height: 1.6;">원활한 예식 준비를 위해<br>참석 여부를 미리 알려주시면 감사하겠습니다.</p>
   
-  <!-- form 태그의 action 부분에 2단계에서 발급받은 SheetDB 주소를 넣으세요 -->
-  <form id="rsvp-form" action="https://sheetdb.io/api/v1/jgmlsvtnqcytz" method="POST" style="text-align: left; background: #fff; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.05);">
+  <form id="rsvp-form" action="여기에_SheetDB_발급_주소를_넣으세요" method="POST" style="text-align: left; background: #faf8f5; padding: 25px 20px; border-radius: 12px; border: 1px solid #f0eae1; box-shadow: 0 4px 15px rgba(0,0,0,0.02);">
     
-    <!-- 1. 성함 -->
-    <div style="margin-bottom: 15px;">
-      <label for="name" style="display:block; margin-bottom:5px; font-weight:bold; font-size:14px;">성함</label>
-      <input type="text" id="name" name="name" required placeholder="성함을 입력해주세요" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px; box-sizing: border-box;">
+    <div style="margin-bottom: 20px;">
+      <label for="rsvp-name" style="display:block; margin-bottom:8px; font-weight:600; font-size:14px; color:#555;">성함</label>
+      <input type="text" id="rsvp-name" name="name" required placeholder="성함을 입력해 주세요" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; box-sizing: border-box; font-size: 14px; -webkit-appearance: none;">
     </div>
 
-    <!-- 2. 신랑신부 구분 -->
-    <div style="margin-bottom: 15px;">
-      <span style="display:block; margin-bottom:5px; font-weight:bold; font-size:14px;">구분</span>
-      <label style="margin-right: 15px;"><input type="radio" name="side" value="신랑측" required> 신랑측</label>
-      <label><input type="radio" name="side" value="신부측"> 신부측</label>
+    <div style="margin-bottom: 20px;">
+      <span style="display:block; margin-bottom:8px; font-weight:600; font-size:14px; color:#555;">구분</span>
+      <div style="display: flex; gap: 20px;">
+        <label style="display:flex; align-items:center; font-size:14px; cursor:pointer;"><input type="radio" name="side" value="신랑측" checked style="margin-right:6px; width:16px; height:16px;"> 신랑측</label>
+        <label style="display:flex; align-items:center; font-size:14px; cursor:pointer;"><input type="radio" name="side" value="신부측" style="margin-right:6px; width:16px; height:16px;"> 신부측</label>
+      </div>
     </div>
 
-    <!-- 3. 참석 여부 -->
-    <div style="margin-bottom: 15px;">
-      <span style="display:block; margin-bottom:5px; font-weight:bold; font-size:14px;">참석 여부</span>
-      <label style="margin-right: 15px;"><input type="radio" name="attend" value="참석" required> 참석합니다</label>
-      <label><input type="radio" name="attend" value="불참"> 마음으로 축하합니다</label>
+    <div style="margin-bottom: 20px;">
+      <span style="display:block; margin-bottom:8px; font-weight:600; font-size:14px; color:#555;">참석 여부</span>
+      <div style="display: flex; gap: 20px;">
+        <label style="display:flex; align-items:center; font-size:14px; cursor:pointer;"><input type="radio" name="attend" value="참석" checked style="margin-right:6px; width:16px; height:16px;"> 참석합니다</label>
+        <label style="display:flex; align-items:center; font-size:14px; cursor:pointer;"><input type="radio" name="attend" value="불참" style="margin-right:6px; width:16px; height:16px;"> 마음으로 축하합니다</label>
+      </div>
     </div>
 
-    <!-- 4. 식사 여부 -->
-    <div style="margin-bottom: 15px;">
-      <span style="display:block; margin-bottom:5px; font-weight:bold; font-size:14px;">식사 여부</span>
-      <label style="margin-right: 15px;"><input type="radio" name="meal" value="식사함" required> 식사 예정</label>
-      <label><input type="radio" name="meal" value="식사안함"> 식사 안함</label>
+    <div style="margin-bottom: 20px;">
+      <span style="display:block; margin-bottom:8px; font-weight:600; font-size:14px; color:#555;">식사 여부</span>
+      <div style="display: flex; gap: 20px;">
+        <label style="display:flex; align-items:center; font-size:14px; cursor:pointer;"><input type="radio" name="meal" value="식사함" checked style="margin-right:6px; width:16px; height:16px;"> 식사 예정</label>
+        <label style="display:flex; align-items:center; font-size:14px; cursor:pointer;"><input type="radio" name="meal" value="식사안함" style="margin-right:6px; width:16px; height:16px;"> 식사 안함</label>
+      </div>
     </div>
 
-    <!-- 5. 동반 인원 -->
-    <div style="margin-bottom: 15px;">
-      <label for="guests" style="display:block; margin-bottom:5px; font-weight:bold; font-size:14px;">동반 인원 (본인 제외)</label>
-      <select id="guests" name="guests" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px;">
+    <div style="margin-bottom: 20px;">
+      <label for="rsvp-guests" style="display:block; margin-bottom:8px; font-weight:600; font-size:14px; color:#555;">동반 인원 (본인 제외)</label>
+      <select id="rsvp-guests" name="guests" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; background-color:#fff; font-size:14px; box-sizing: border-box;">
         <option value="없음">없음</option>
         <option value="1명">1명</option>
         <option value="2명">2명</option>
@@ -253,15 +253,160 @@
       </select>
     </div>
 
-    <!-- 6. 메시지 -->
-    <div style="margin-bottom: 20px;">
-      <label for="message" style="display:block; margin-bottom:5px; font-weight:bold; font-size:14px;">축하 메시지</label>
-      <textarea id="message" name="message" rows="3" placeholder="신랑 신부에게 전할 축하 한마디를 적어주세요" style="width:100%; padding:10px; border:1px solid #ccc; border-radius:5px; box-sizing: border-box; resize: none;"></textarea>
+    <div style="margin-bottom: 25px;">
+      <label for="rsvp-message" style="display:block; margin-bottom:8px; font-weight:600; font-size:14px; color:#555;">축하 메시지</label>
+      <textarea id="rsvp-message" name="message" rows="3" placeholder="축하의 한마디를 남겨주세요 (방명록에 노출됩니다)" style="width:100%; padding:12px; border:1px solid #ddd; border-radius:6px; box-sizing: border-box; resize: none; font-size: 14px; line-height: 1.5; -webkit-appearance: none;"></textarea>
     </div>
 
-    <button type="submit" style="width:100%; padding:12px; background-color: #bfa286; color:#fff; border:none; border-radius:5px; font-size:16px; cursor:pointer; font-weight:bold;">의사 전달하기</button>
+    <button type="submit" id="rsvp-submit-btn" style="width:100%; padding:14px; background-color: #c2b09b; color:#fff; border:none; border-radius:6px; font-size:15px; cursor:pointer; font-weight:bold; letter-spacing: 0.5px; transition: background 0.2s;">의사 전달하기</button>
   </form>
+
+  <div class="guestbook-section" style="margin-top: 50px; text-align: left;">
+    <h3 style="text-align: center; font-size: 17px; color: #4a4a4a; margin-bottom: 25px; font-weight: 500;">축하의 한마디 💕</h3>
+    <div id="loading-messages" style="text-align: center; color: #aaa; font-size: 13px; padding: 20px;">메시지를 가져오는 중입니다...</div>
+    <div id="message-list" style="display: flex; flex-direction: column; gap: 12px;"></div>
+  </div>
 </section>
+
+<script>
+  (function() {
+    var form = document.getElementById('rsvp-form');
+    var sheetDbUrl = form.getAttribute('action');
+
+    // [기능 1] 구글 시트 데이터 불러와서 화면에 실시간 노출
+    function loadMessages() {
+      var messageList = document.getElementById('message-list');
+      var loadingDiv = document.getElementById('loading-messages');
+
+      if (!sheetDbUrl || sheetDbUrl.includes('여기에_SheetDB')) {
+        loadingDiv.innerText = 'https://sheetdb.io/api/v1/jgmlsvtnqcytz';
+        return;
+      }
+
+      fetch(sheetDbUrl)
+        .then(function(res) { return res.json(); })
+        .then(function(data) {
+          loadingDiv.style.display = 'none';
+          messageList.innerHTML = '';
+
+          // 예외 처리 및 빈 데이터 검사
+          if (!data || data.length === 0 || data.error) {
+            messageList.innerHTML = '<div style="text-align:center; color:#bbb; font-size:13px; padding:30px 0;">첫 번째 축하 메시지의 주인공이 되어보세요!</div>';
+            return;
+          }
+
+          var validMessageCount = 0;
+          // 배열을 카피한 뒤 최신순(역순)으로 순회
+          data.slice().reverse().forEach(function(item) {
+            // 메시지 알맹이가 비어있는 단순 참석 체크건은 방명록 리스트에서 제외
+            if (!item.message || item.message.trim() === '') return;
+            validMessageCount++;
+
+            var card = document.createElement('div');
+            card.style.cssText = 'background:#fdfcfb; padding:16px; border-radius:10px; border:1px solid #ede6dc; box-shadow: 0 2px 5px rgba(0,0,0,0.01);';
+
+            var topRow = document.createElement('div');
+            topRow.style.cssText = 'display:flex; justify-content:space-between; margin-bottom:10px; font-size:13px;';
+            
+            var nameInfo = document.createElement('span');
+            nameInfo.style.fontWeight = 'bold';
+            nameInfo.style.color = '#555';
+            // 값이 유실되었을 경우의 안전장치
+            var sideText = item.side ? item.side : '하객';
+            nameInfo.innerText = item.name + ' (' + sideText + ')';
+
+            var attendTag = document.createElement('span');
+            var isAttend = (item.attend === '참석');
+            attendTag.style.color = isAttend ? '#8ba888' : '#bfa6a6';
+            attendTag.style.fontSize = '12px';
+            attendTag.style.fontWeight = '600';
+            attendTag.innerText = isAttend ? '♥ 참석' : '마음으로 축하';
+
+            topRow.appendChild(nameInfo);
+            topRow.appendChild(attendTag);
+
+            var bodyRow = document.createElement('div');
+            bodyRow.style.cssText = 'font-size:14px; color:#444; line-height:1.55; white-space:pre-wrap; word-break:break-all;';
+            bodyRow.innerText = item.message;
+
+            card.appendChild(topRow);
+            card.appendChild(bodyRow);
+            messageList.appendChild(card);
+          });
+
+          if (validMessageCount === 0) {
+            messageList.innerHTML = '<div style="text-align:center; color:#bbb; font-size:13px; padding:30px 0;">첫 번째 축하 메시지의 주인공이 되어보세요!</div>';
+          }
+        })
+        .catch(function(err) {
+          console.error(err);
+          loadingDiv.innerText = '방명록을 불러오는 중 연결 오류가 발생했습니다.';
+        });
+    }
+
+    // 문서 로드 시 최초 실행
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', loadMessages);
+    } else {
+      loadMessages();
+    }
+
+    // [기능 2] 데이터 안전하게 전송하기
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      var btn = document.getElementById('rsvp-submit-btn');
+      btn.disabled = true;
+      btn.style.backgroundColor = '#d9cbdc';
+      btn.innerText = '소중한 정보 전송 중...';
+
+      // 요소 선택 안정화 (템플릿 내 충돌 방지용 순수 API 구현)
+      var nameVal = document.getElementById('rsvp-name').value;
+      var messageVal = document.getElementById('rsvp-message').value;
+      var guestsVal = document.getElementById('rsvp-guests').value;
+      
+      // 모바일 브라우저 라디오 선택 값 완벽 방어 코드
+      var sideActive = form.querySelector('input[name="side"]:checked');
+      var attendActive = form.querySelector('input[name="attend"]:checked');
+      var mealActive = form.querySelector('input[name="meal"]:checked');
+
+      var payload = {
+        name: nameVal,
+        side: sideActive ? sideActive.value : '신랑측',
+        attend: attendActive ? attendActive.value : '참석',
+        meal: mealActive ? mealActive.value : '식사함',
+        guests: guestsVal,
+        message: messageVal
+      };
+
+      // API 서버로 JSON 데이터 푸시
+      fetch(sheetDbUrl, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify([payload])
+      })
+      .then(function(res) {
+        if (res.ok) return res.json();
+        throw new Error('전송오류');
+      })
+      .then(function() {
+        alert('참석 의사와 소중한 말씀이 신랑 신부에게 안전하게 전달되었습니다. 감사합니다! 💕');
+        form.reset();
+        btn.disabled = false;
+        btn.style.backgroundColor = '#c2b09b';
+        btn.innerText = '의사 전달하기';
+        loadMessages(); // 즉시 새로고침 없이 아래 템플릿 리스트 최신화
+      })
+      .catch(function(err) {
+        alert('데이터 전송에 실패했습니다. 잠시 후 다시 시도해 주세요.');
+        btn.disabled = false;
+        btn.style.backgroundColor = '#c2b09b';
+        btn.innerText = '의사 전달하기';
+      });
+    });
+  })();
+</script>
+
 <!-- 참석여부 섹션 끝 -->
 
    <!-- 축하 메시지 리스트 공간 -->
