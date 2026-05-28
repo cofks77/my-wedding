@@ -206,6 +206,18 @@
       </div>
     </section>
 
+    <!-- 축하 메시지 리스트 공간 -->
+<div class="guestbook-section" style="margin-top: 40px; max-width: 500px; margin-left: auto; margin-right: auto; text-align: left;">
+  <h3 style="text-align: center; font-size: 18px; color: #333; margin-bottom: 20px;">축하의 한마디 💕</h3>
+  
+  <!-- 로딩 표시 (데이터를 불러오는 동안 보여집니다) -->
+  <div id="loading-messages" style="text-align: center; color: #999; font-size: 14px; padding: 20px;">
+    메시지를 불러오는 중입니다...
+  </div>
+
+  <!-- 여기에 댓글들이 동적으로 추가됩니다 -->
+  <div id="message-list" style="display: flex; flex-direction: column; gap: 15px;"></div>
+</div>
     
     <!-- 참석여부 섹션 시작 -->
 <section class="rsvp-section" style="padding: 40px 20px; text-align: center; max-width: 500px; margin: 0 auto;">
@@ -263,26 +275,117 @@
   </form>
 </section>
 <!-- 참석여부 섹션 끝 -->
-    <script>
-  var form = document.getElementById('rsvp-form');
-  form.addEventListener("submit", function(e) {
-    e.preventDefault(); // 기본 페이지 이동 막기
     
-    // 버튼 비활성화 (더블 클릭 방지)
+   <script>
+  var form = document.getElementById('rsvp-form');
+  var sheetDbUrl = form.action; // form 태그에 넣으신 SheetDB 주소를 자동으로 가져옵니다.
+
+  // [기능 1] 구글 시트에서 데이터를 가져와 화면에 댓글로 뿌려주는 함수
+  function loadMessages() {
+    var messageList = document.getElementById('message-list');
+    var loadingDiv = document.getElementById('loading-messages');
+
+    // 최신 메시지가 위로 오게 하려면 SheetDB 주소 뒤에 ?sort_by=name&sort_order=desc 등을 쓸 수 있지만, 
+    // 여기서는 기본으로 가져온 뒤 자바스크립트로 역순(최신순) 정렬하겠습니다.
+    fetch(sheetDbUrl)
+      .then(function(response) { return response.json(); })
+      .then(function(data) {
+        loadingDiv.style.display = 'none'; // 로딩 메시지 숨기기
+        messageList.innerHTML = ''; // 기존 리스트 초기화
+
+        if (!data || data.length === 0) {
+          messageList.innerHTML = '<div style="text-align:center; color:#ccc; font-size:14px; padding:20px;">첫 번째 축하 메시지를 남겨보세요!</div>';
+          return;
+        }
+
+        // 배열을 역순으로 뒤집어서 최신 댓글이 맨 위에 오도록 함
+        data.reverse().forEach(function(item) {
+          // 메시지가 없는 참석 여부만 보낸 데이터는 방명록에서 제외
+          if (!item.message || item.message.trim() === '') return;
+
+          // 댓글 상자 만들기
+          var msgCard = document.createElement('div');
+          msgCard.style.background = '#fcfaf7';
+          msgCard.style.padding = '15px';
+          msgCard.style.borderRadius = '8px';
+          msgCard.style.border = '1px solid #f0e9e1';
+          msgCard.style.boxShadow = '0 1px 3px rgba(0,0,0,0.02)';
+
+          // 이름 및 구분 표시 (예: 김철수 (신랑측))
+          var infoArea = document.createElement('div');
+          infoArea.style.display = 'flex';
+          infoArea.style.justifyContent = 'space-between';
+          infoArea.style.marginBottom = '8px';
+          infoArea.style.fontSize = '13px';
+          
+          var nameSpan = document.createElement('span');
+          nameSpan.style.fontWeight = 'bold';
+          nameSpan.style.color = '#555';
+          nameSpan.innerText = item.name + ' (' + (item.side || '참석자') + ')';
+
+          var attendSpan = document.createElement('span');
+          attendSpan.style.color = item.attend === '참석' ? '#2ecc71' : '#95a5a6';
+          attendSpan.style.fontSize = '11px';
+          attendSpan.innerText = item.attend === '참석' ? '♥ 참석' : '마음으로 축하';
+
+          infoArea.appendChild(nameSpan);
+          infoArea.appendChild(attendSpan);
+
+          // 메시지 본문
+          var contentArea = document.createElement('div');
+          contentArea.style.fontSize = '14px';
+          contentArea.style.color = '#333';
+          contentArea.style.lineHeight = '1.5';
+          contentArea.style.whiteSpace = 'pre-wrap'; // 줄바꿈 적용
+          contentArea.innerText = item.message;
+
+          msgCard.appendChild(infoArea);
+          msgCard.appendChild(contentArea);
+          messageList.appendChild(msgCard);
+        });
+      })
+      .catch(function(error) {
+        console.error('메시지 로딩 실패:', error);
+        loadingDiv.innerText = '메시지를 불러오는 중 오류가 발생했습니다.';
+      });
+  }
+
+  // 페이지가 로드되면 자동으로 댓글 불러오기 실행
+  window.addEventListener('DOMContentLoaded', loadMessages);
+
+
+  // [기능 2] 하객이 폼을 제출할 때 작동하는 코드
+  form.addEventListener("submit", function(e) {
+    e.preventDefault(); 
+    
     var submitBtn = form.querySelector('button[type="submit"]');
     submitBtn.disabled = true;
     submitBtn.innerText = '전송 중...';
 
-    fetch(form.action, {
+    var formData = {
+      name: document.getElementById('name').value,
+      side: form.querySelector('input[name="side"]:checked')?.value || '',
+      attend: form.querySelector('input[name="attend"]:checked')?.value || '',
+      meal: form.querySelector('input[name="meal"]:checked')?.value || '',
+      guests: document.getElementById('guests').value,
+      message: document.getElementById('message').value
+    };
+
+    fetch(sheetDbUrl, {
         method : "POST",
-        body: new FormData(document.getElementById("rsvp-form")),
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify([formData]),
     }).then(function(response) {
-        return response.json();
+        if(response.ok) return response.json();
+        throw new Error('네트워크 에러');
     }).then(function(html) {
-        alert('참석 의사가 소중히 전달되었습니다. 감사합니다! 💕');
-        form.reset(); // 입력창 초기화
+        alert('참석 의사와 메시지가 소중히 전달되었습니다. 감사합니다! 💕');
+        form.reset(); // 입력창 비우기
         submitBtn.disabled = false;
         submitBtn.innerText = '의사 전달하기';
+        
+        // 중요: 등록이 성공하면 구글 시트에서 데이터를 다시 읽어와 방명록을 갱신합니다!
+        loadMessages();
     }).catch(function(error) {
         alert('전송 중 오류가 발생했습니다. 다시 시도해 주세요.');
         submitBtn.disabled = false;
