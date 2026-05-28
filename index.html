@@ -72,200 +72,67 @@ const CONFIG = {
       { role: "신부", name: "박채란", bank: "우리은행", number: "1002-052-730160" },
       { role: "아버지", name: "박진", bank: "토스뱅크", number: "1000-4415-2234" },
       { role: "어머니", name: "이영순", bank: "신한은행", number: "110-061-416741" }
-    ]
-  },
-<!-- 참석 여부 조사 폼 -->
-<div class="rsvp-container" style="max-width: 500px; margin: 0 auto; padding: 20px;">
-  <h2>💌 참석 여부 전달하기</h2>
-  <form id="rsvpForm">
-    <!-- 이름 -->
-    <div style="margin-bottom: 15px;">
-      <label for="userName"><b>이름</b></label>
-      <input type="text" id="userName" required style="width: 100%; padding: 8px; margin-top: 5px;">
-    </div>
 
-    <!-- 참석 여부 -->
-    <div style="margin-bottom: 15px;">
-      <label><b>참석 여부</b></label><br>
-      <input type="radio" id="attendY" name="attendance" value="참석" checked> <label for="attendY">참석합니다</label>
-      <input type="radio" id="attendN" name="attendance" value="불참"> <label for="attendN">마음으로 축하합니다</label>
-    </div>
+// ── 7. 참석 여부 설정 (구글 스프레드시트 직접 연동) ──
+  attendance: {
+    title: "참석 여부 전달하기",
+    description: "신랑 신부에게 참석 여부를 미리 알려주시면\n원활한 예식 준비에 큰 도움이 됩니다.",
+    
+    // ⚠️ 아래 URL은 구글 시트 배포 후 얻게 되는 웹 앱 주소(Macros URL)로 교체해야 합니다.
+    googleSheetUrl: "https://script.google.com/macros/s/AKfycbx8DB7dU-w0n5g2Zg07q_8nnj5FpcGCnM6QLzifUy29Ny2MW89158ZUy8tZ1XsCj_Uf/exec",
 
-    <!-- 식사 여부 -->
-    <div style="margin-bottom: 15px;">
-      <label><b>식사 여부</b></label><br>
-      <input type="radio" id="eatY" name="meal" value="식사함" checked> <label for="eatY">식사 예정</label>
-      <input type="radio" id="eatN" name="meal" value="식사안함"> <label for="eatN">식사 안함</label>
-    </div>
-
-    <!-- 동반 인원 -->
-    <div style="margin-bottom: 15px;">
-      <label for="companion"><b>동반 인원 (본인 제외)</b></label>
-      <select id="companion" style="width: 100%; padding: 8px; margin-top: 5px;">
-        <option value="0">없음</option>
-        <option value="1">1명</option>
-        <option value="2">2명</option>
-        <option value="3">3명 이상</option>
-      </select>
-    </div>
-
-    <!-- 축하 메시지 -->
-    <div style="margin-bottom: 15px;">
-      <label for="guestMessage"><b>축하 메시지</b></label>
-      <textarea id="guestMessage" rows="4" required style="width: 100%; padding: 8px; margin-top: 5px; resize: none;"></textarea>
-    </div>
-
-    <button type="submit" style="width: 100%; padding: 12px; background-color: #fca3b7; color: white; border: none; border-radius: 5px; cursor: pointer;">축하 마음 전하기</button>
-  </form>
-</div>
-
-<hr style="border: 0; height: 1px; background: #ccc; margin: 40px 0;">
-
-<!-- 축하 메시지 댓글 리스트 공간 -->
-<div class="comment-container" style="max-width: 500px; margin: 0 auto; padding: 20px;">
-  <h3>✨ 신랑 신부에게 전한 축하 (댓글)</h3>
-  <div id="commentList">
-    <!-- 작성된 댓글들이 여기에 동적으로 추가됩니다 -->
-  </div>
-</div>
-<script>
-  // config.js에 입력한 주소를 자동으로 가져옵니다.
-  const GOOGLE_APP_SCRIPT_URL = CONFIG.googleSheetUrl;
-
-  // 1. 페이지가 로드되면 구글 시트에서 기존 댓글 리스트 읽어오기
-  window.addEventListener('DOMContentLoaded', () => {
-    if (!GOOGLE_APP_SCRIPT_URL || GOOGLE_APP_SCRIPT_URL.includes("여기에_구글")) {
-      console.warn("구글 스프레드시트 웹 앱 URL이 설정되지 않았습니다.");
-      return;
+    // UI 렌더링용 라벨 및 옵션 설정
+    labels: {
+      name: "성함",
+      status: "참석 여부",
+      meal: "식사 여부",
+      companion: "동반 인원 (본인 포함)",
+      message: "축하 메시지"
+    },
+    options: {
+      status: ["참석", "미참석", "미정"],
+      meal: ["식사함", "식사 안 함", "미정"],
+      companion: ["1명", "2명", "3명", "4명", "5명 이상"]
     }
+  },
 
-    fetch(GOOGLE_APP_SCRIPT_URL)
-      .then(response => response.json())
-      .then(data => {
-        // 구글 시트에 담긴 하객 데이터를 최신순(역순)으로 정렬하여 화면에 표시
-        data.reverse().forEach(item => {
-          addCommentToField(item.name, item.attendance, item.message);
-        });
-      })
-      .catch(err => console.error("기존 댓글 데이터를 불러오지 못했습니다:", err));
-  });
+  // ── 8. 구글 스프레드시트로 직접 데이터를 전송하는 함수 ──
+  submitAttendance: function(data) {
+    const targetUrl = this.attendance.googleSheetUrl;
+    
+    // 일반적인 JSON 형태로 전송하기 위해 URLSearchParams 구성
+    const formData = new URLSearchParams();
+    formData.append("name", data.name);
+    formData.append("status", data.status);
+    formData.append("meal", data.meal);
+    formData.append("companion", data.companion);
+    formData.append("message", data.message);
 
-  // 2. 하객이 전송 버튼을 눌렀을 때 구글 시트로 데이터 전송 및 댓글 추가
-  document.getElementById('rsvpForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const submitButton = e.target.querySelector('button');
-    submitButton.disabled = true;
-    submitButton.innerText = "전송 중...";
-
-    const data = {
-      name: document.getElementById('userName').value,
-      attendance: document.querySelector('input[name="attendance"]:checked').value,
-      meal: document.querySelector('input[name="meal"]:checked').value,
-      companion: Number(document.getElementById('companion').value),
-      message: document.getElementById('guestMessage').value
-    };
-
-    fetch(GOOGLE_APP_SCRIPT_URL, {
+    // 구글 앱스 스크립트로 POST 전송
+    return fetch(targetUrl, {
       method: "POST",
-      mode: "no-cors", // CORS 정책 처리
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: formData.toString()
     })
-    .then(() => {
-      alert('축하 메시지와 참석 여부가 안전하게 전달되었습니다! 🎉');
-      
-      // 구글 저장 접수 후 즉시 화면 하단 댓글창에 추가
-      addCommentToField(data.name, data.attendance, data.message);
-
-      // 입력 창 리셋 및 버튼 복구
-      document.getElementById('rsvpForm').reset();
-      submitButton.disabled = false;
-      submitButton.innerText = "축하 마음 전하기";
+    .then(response => response.json())
+    .then(result => {
+      if (result.result === "success") {
+        alert("참석 여부와 축하 메시지가 구글 시트에 안전하게 기록되었습니다! 🤍");
+        return true;
+      } else {
+        throw new Error(result.error);
+      }
     })
-    .catch(error => {
-      console.error('Error:', error);
-      alert('오류가 발생했습니다. 다시 시도해 주세요.');
-      submitButton.disabled = false;
-      submitButton.innerText = "축하 마음 전하기";
+    .catch((error) => {
+      console.error("전송 실패:", error);
+      alert("오류가 발생했습니다. 다시 시도해 주세요.");
+      return false;
     });
-  });
-
-  // 댓글 UI를 동적으로 생성해 주는 공통 함수
-  function addCommentToField(name, attendance, message) {
-    const commentList = document.getElementById('commentList');
-    const commentDiv = document.createElement('div');
-    commentDiv.style.borderBottom = '1px solid #eee';
-    commentDiv.style.padding = '15px 0';
-    
-    const badgeColor = attendance === '참석' ? '#e2f0d9' : '#fbe5d6';
-    const badgeTextColor = attendance === '참석' ? '#385723' : '#c65911';
-
-    commentDiv.innerHTML = `
-      <div style="display: flex; align-items: center; margin-bottom: 5px;">
-        <strong style="margin-right: 10px;">${name}</strong>
-        <span style="font-size: 11px; padding: 2px 6px; background-color: ${badgeColor}; color: ${badgeTextColor}; border-radius: 3px;">${attendance}</span>
-      </div>
-      <p style="margin: 5px 0; color: #555; white-space: pre-wrap;">${message}</p>
-    `;
-
-    commentList.insertBefore(commentDiv, commentList.firstChild);
-  }
-</script>
-
-  // [임시 기능 구현] 데이터베이스 연동 전, 화면에서 작동 확인용 스크립트
-  document.getElementById('rsvpForm').addEventListener('submit', function(e) {
-    e.preventDefault();
-
-    const name = document.getElementById('userName').value;
-    const attendance = document.querySelector('input[name="attendance"]:checked').value;
-    const meal = document.querySelector('input[name="meal"]:checked').value;
-    const companion = document.getElementById('companion').value;
-    const message = document.getElementById('guestMessage').value;
-
-    // 댓글을 화면에 추가하는 함수 호출
-    addCommentToField(name, attendance, message);
-
-    // 폼 초기화
-    document.getElementById('rsvpForm').reset();
-    alert('축하 메시지가 등록되었습니다!');
-  });
-
-  function addCommentToField(name, attendance, message) {
-    const commentList = document.getElementById('commentList');
-    
-    // 댓글 박스 생성
-    const commentDiv = document.createElement('div');
-    commentDiv.style.borderBottom = '1px solid #eee';
-    commentDiv.style.padding = '15px 0';
-    
-    // 참석 여부에 따른 작은 태그
-    const badgeColor = attendance === '참석' ? '#e2f0d9' : '#fbe5d6';
-    const badgeTextColor = attendance === '참석' ? '#385723' : '#c65911';
-
-    commentDiv.innerHTML = `
-      <div style="display: flex; align-items: center; margin-bottom: 5px;">
-        <strong style="margin-right: 10px;">${name}</strong>
-        <span style="font-size: 11px; padding: 2px 6px; background-color: ${badgeColor}; color: ${badgeTextColor}; border-radius: 3px;">${attendance}</span>
-      </div>
-      <p style="margin: 5px 0; color: #555; white-space: pre-wrap;">${message}</p>
-    `;
-
-    // 최신 댓글이 위로 오도록 추가
-    commentList.insertBefore(commentDiv, commentList.firstChild);
-  }
-</script>
+  },
 
   // ── 링크 공유 시 나타나는 문구 ──
   meta: {
     title: "최재성 ♥ 박채란 결혼합니다",
     description: "2026년 8월 1일, 소중한 분들을 초대합니다."
   }
-};
-
-// ── 8. 구글 스프레드시트 연동 설정 ──
-  // 구글 앱스 스크립트 배포 후 받은 웹 앱 URL을 아래 큰따옴표 안에 넣어주세요!
-  googleSheetUrl: "https://www.appsheet.com/template/appdef?appId=a6f183f8-fc89-4603-bf8b-698f9bbf990c&channel=sheets&utm_source=sheets_tools&utm_medium=sheets&utm_campaign=workspace_appsheet&onboarding=True&appName=%EA%B2%B0%ED%98%BC%EC%8B%9D%EC%B0%B8%EC%84%9D%EC%97%AC%EB%B6%80-95872531&channel=sheets#Home"
 };
