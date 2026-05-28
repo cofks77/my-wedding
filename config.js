@@ -1,22 +1,6 @@
-/**
- * Watercolor Soft Wedding Invitation Configuration
- *
- * 이 파일에서 청첩장의 모든 정보를 수정할 수 있습니다.
- * 이미지는 설정이 필요 없습니다. 아래 폴더에 순번 파일명으로 넣으면 자동 감지됩니다.
- *
- * 이미지 폴더 구조 (파일명 규칙):
- * images/hero/1.jpg      - 메인 사진 (1장, 필수)
- * images/story/1.jpg, 2.jpg, ...  - 스토리 사진들 (순번, 자동 감지)
- * images/gallery/1.jpg, 2.jpg, ... - 갤러리 사진들 (순번, 자동 감지)
- * images/location/1.jpg  - 약도/지도 이미지 (1장)
- * images/og/1.jpg        - 카카오톡 공유 썸네일 (1장)
- */
-
 const CONFIG = {
-  // ── 1. 초대장 열기 ──
-  useCurtain: true,  // 초대장 열기 화면 사용 여부 (true: 사용, false: 바로 본문 표시)
+  useCurtain: true,
 
-  // ── 2. 메인 (히어로) ──
   groom: {
     name: "최재성",
     nameEn: "Groom",
@@ -40,29 +24,25 @@ const CONFIG = {
     time: "15:30",
     venue: "아펠가모 잠실",
     hall: "웨딩홀 2층",
-    address: "서울특별시 송파구 올림픽로 35길 137(신천동)         한국광고문화회관 2층",
+    address: "서울특별시 송파구 올림픽로 35길 137(신천동) 한국광고문화회관 2층",
     tel: "02-2144-0230"
   },
 
-  // ── 3. 인사말 ──
   greeting: {
-    title: "저희의 첫 계절을 축복해주세요",
+    title: "저희 두 사람의 첫 계절을 축복해주세요",
     content: "당신과의 사계는\n\n봄처럼 새로운 세상이 피어나고\n여름처럼 찬란히 빛날 것입니다.\n모든 것이 깊어지는 가을이 지나면\n고요히 잠이 드는 겨울도 오겠지요\n\n우리는 서로의 시작과 끝\n모든 순간을 함께할 것 입니다."
   },
 
-  // ── 4. 우리의 이야기 ──
   story: {
     title: "우리의 이야기",
     content: "'연인'으로 여덟 번의 해를 지나\n'부부'로서 첫 번째 해를 맞이하고자 합니다.\n저희의 새 출발을 함께 축복해주세요."
   },
 
-  // ── 5. 오시는 길 ──
   mapLinks: {
     kakao: "https://kko.to/0elyoFiXhP",
     naver: "https://naver.me/FzSZfBX6"
   },
 
-  // ── 6. 마음 전하실 곳 ──
   accounts: {
     groom: [
       { role: "신랑", name: "최재성", bank: "신한은행", number: "110-280-968042" },
@@ -72,18 +52,13 @@ const CONFIG = {
       { role: "신부", name: "박채란", bank: "우리은행", number: "1002-052-730160" },
       { role: "아버지", name: "박진", bank: "토스뱅크", number: "1000-4415-2234" },
       { role: "어머니", name: "이영순", bank: "신한은행", number: "110-061-416741" }
-    ] // 👈 닫는 대괄호 추가 및 구조 교정
+    ]
   },
 
-  // ── 7. 참석 여부 설정 (구글 스프레드시트 직접 연동) ──
   attendance: {
     title: "참석 여부 전달하기",
     description: "신랑 신부에게 참석 여부를 미리 알려주시면\n원활한 예식 준비에 큰 도움이 됩니다.",
-    
-    // 복사해주신 구글 앱스 스크립트 웹 앱 주소를 정상 적용했습니다.
     googleSheetUrl: "https://script.google.com/macros/s/AKfycbx8DB7dU-w0n5g2Zg07q_8nnj5FpcGCnM6QLzifUy29Ny2MW89158ZUy8tZ1XsCj_Uf/exec",
-
-    // UI 렌더링용 라벨 및 옵션 설정
     labels: {
       name: "성함",
       status: "참석 여부",
@@ -98,11 +73,8 @@ const CONFIG = {
     }
   },
 
-  // ── 8. 구글 스프레드시트로 직접 데이터를 전송하는 함수 ──
   submitAttendance: function(data) {
     const targetUrl = this.attendance.googleSheetUrl;
-    
-    // 일반적인 JSON 형태로 전송하기 위해 URLSearchParams 구성
     const formData = new URLSearchParams();
     formData.append("name", data.name);
     formData.append("status", data.status);
@@ -110,7 +82,6 @@ const CONFIG = {
     formData.append("companion", data.companion);
     formData.append("message", data.message);
 
-    // 구글 앱스 스크립트로 POST 전송
     return fetch(targetUrl, {
       method: "POST",
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -132,7 +103,6 @@ const CONFIG = {
     });
   },
 
-  // ── 링크 공유 시 나타나는 문구 ──
   meta: {
     title: "최재성 ♥ 박채란 결혼합니다",
     description: "2026년 8월 1일, 소중한 분들을 초대합니다."
