@@ -277,8 +277,7 @@
   <div id="message-list" style="display: flex; flex-direction: column; gap: 15px;"></div>
 </div>
 
-    
-   <script>
+<script>
   (function() {
     var form = document.getElementById('rsvp-form');
     var sheetDbUrl = form.getAttribute('action'); 
@@ -288,7 +287,7 @@
       var messageList = document.getElementById('message-list');
       var loadingDiv = document.getElementById('loading-messages');
 
-      if (!sheetDbUrl || sheetDbUrl.includes('여기에_SheetDB')) {
+      if (!sheetDbUrl || sheetDbUrl.includes('https://sheetdb.io/api/v1/29ru0nwctqbqd')) {
         loadingDiv.innerText = 'SheetDB 주소가 세팅되지 않았습니다.';
         return;
       }
@@ -417,6 +416,7 @@
     });
   })();
 </script>
+
 
 
     <!-- ─── Footer ─── -->
