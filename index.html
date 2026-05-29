@@ -1,3 +1,10 @@
+<div class="guestbook-wrapper" style="margin: 30px auto; max-width: 600px; padding: 0 20px;">
+  <h3 style="font-size: 16px; margin-bottom: 15px; color: #333; text-align: center;">축하 마음 전하기 💌</h3>
+  
+  <div id="guestbook-list"></div>
+</div>
+
+
 <script>
 const CONFIG = {
   useCurtain: true,
@@ -126,9 +133,6 @@ const CONFIG = {
   }
 };
 
-// ==========================================
-// 방명록 실시간 화면 표시 및 전송 제어 로직
-// ==========================================
 function loadAndRenderGuestbook() {
   const listContainer = document.getElementById('guestbook-list');
   if (!listContainer) return;
@@ -144,7 +148,7 @@ function loadAndRenderGuestbook() {
     data.forEach(item => {
       if (item.message && item.message.trim() !== '') {
         const commentHtml = `
-          <div class="guestbook-item" style="border-bottom: 1px solid #f2f2f2; padding: 15px 5px; text-align: left;">
+          <div class="guestbook-item" style="border-bottom: 1px solid #f2f2f2; padding: 15px 5px; text-align: left; background: #fff; margin-bottom: 10px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
             <strong style="color: #333; font-size: 14px;">${item.name} <span style="font-weight: normal; color: #888; font-size: 12px;">(${item.status})</span></strong>
             <p style="margin: 5px 0 0 0; color: #555; font-size: 14px; line-height: 1.5; white-space: pre-line;">${item.message}</p>
           </div>
