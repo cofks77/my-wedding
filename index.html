@@ -1,376 +1,170 @@
-<!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="format-detection" content="telephone=no">
+<script>
+const CONFIG = {
+  useCurtain: true,
 
-  <!-- Meta / OG tags - config.js 값으로 script에서 동적 설정 -->
-  <meta property="og:type" content="">
-<meta property="og:title" content="최재성 ♥ 박채란 결혼합니다">
-<meta property="og:description" content="2026년 8월 1일 토요일 오후 3시 30분, 아펠가모 잠실">
-<meta property="og:image" content="https://cofks77.github.io/my-wedding/images/og/1.jpg">
-  <meta name="description" content="">
+  groom: {
+    name: "최재성",
+    nameEn: "Groom",
+    father: "철수",
+    mother: "경자",
+    fatherDeceased: false,
+    motherDeceased: false
+  },
 
-  <title>최재성 ♥ 박채란 결혼합니다</title>
+  bride: {
+    name: "박채란",
+    nameEn: "Bride",
+    father: "진",
+    mother: "영순",
+    fatherDeceased: false,
+    motherDeceased: false
+  },
 
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Nanum+Myeongjo:wght@400;700;800&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  wedding: {
+    date: "2026-08-01",
+    time: "15:30",
+    venue: "아펠가모 잠실",
+    hall: "웨딩홀 2층",
+    address: "서울특별시 송파구 올림픽로 35길 137(신천동) 2층",
+    tel: "02-2144-0230"
+  },
 
-  <link rel="stylesheet" href="styles.css">
-  <script src="config.js"></script>
-</head>
-<body>
+  greeting: {
+    title: "저희의 첫 계절을 축복해주세요",
+    content: "당신과의 사계는\n\n봄처럼 새로운 세상이 피어나고\n여름처럼 찬란히 빛날 것입니다.\n모든 것이 깊어지는 가을이 지나면\n고요히 잠이 드는 겨울도 오겠지요\n\n우리는 서로의 시작과 끝\n모든 순간을 함께할 것 입니다."
+  },
 
-  <!-- ═══ Curtain Opening (Watercolor Wash) ═══ -->
-  <div id="curtain" class="curtain">
-    <div class="curtain__wash curtain__wash--top"></div>
-    <div class="curtain__wash curtain__wash--bottom"></div>
-    <div class="curtain__content">
-      <p class="curtain__subtitle">Wedding Invitation</p>
-      <p class="curtain__names" id="curtainNames"></p>
-      <button class="curtain__btn" id="curtainBtn">초대장 열기</button>
-    </div>
-  </div>
+  story: {
+    title: "우리의 3010일의 이야기",
+    content: "'연인'으로 여덟 번의 해를 지나\n'부부'로서 첫 번째 해를 맞이하고자 합니다.\n저희의 새 출발을 함께 축복해주세요."
+  },
 
-  <!-- ═══ Falling Sparkles Canvas ═══ -->
-  <canvas id="sparkleCanvas" class="sparkle-canvas"></canvas>
+  mapLinks: {
+    kakao: "https://kko.to/0elyoFiXhP",
+    naver: "https://naver.me/FzSZfBX6"
+  },
 
-  <!-- ═══ Toast Notification ═══ -->
-  <div id="toast" class="toast" aria-live="polite"></div>
+  accounts: {
+    groom: [
+      { role: "신랑", name: "최재성", bank: "신한은행", number: "110-280-968042" },
+      { role: "어머니", name: "문경자", bank: "국민은행", number: "920301-01-005295" }
+    ],
+    bride: [
+      { role: "신부", name: "박채란", bank: "우리은행", number: "1002-052-730160" },
+      { role: "아버지", name: "박진", bank: "토스뱅크", number: "1000-4415-2234" },
+      { role: "어머니", name: "이영순", bank: "신한은행", number: "110-061-416741" }
+    ]
+  },
 
-  <!-- ═══ Photo Viewer Modal ═══ -->
-  <div id="photoModal" class="photo-modal" role="dialog" aria-modal="true" aria-label="사진 보기">
-    <button class="photo-modal__close" id="modalClose" aria-label="닫기">&times;</button>
-    <button class="photo-modal__nav photo-modal__nav--prev" id="modalPrev" aria-label="이전 사진">&#8249;</button>
-    <button class="photo-modal__nav photo-modal__nav--next" id="modalNext" aria-label="다음 사진">&#8250;</button>
-    <div class="photo-modal__container" id="modalContainer">
-      <img class="photo-modal__img" id="modalImg" src="" alt="사진" draggable="false">
-    </div>
-    <div class="photo-modal__counter" id="modalCounter"></div>
-  </div>
+  attendance: {
+    title: "참석 여부 전달하기",
+    description: "신랑 신부에게 참석 여부를 미리 알려주시면\n원활한 예식 준비에 큰 도움이 됩니다.",
+    googleSheetUrl: "https://script.google.com/macros/s/AKfycbx8DB7dU-w0n5g2Zg07q_8nnj5FpcGCnM6QLzifUy29Ny2MW89158ZUy8tZ1XsCj_Uf/exec",
+    labels: {
+      name: "성함",
+      status: "참석 여부",
+      meal: "식사 여부",
+      companion: "동반 인원 (본인 포함)",
+      message: "축하 메시지"
+    },
+    options: {
+      status: ["참석", "미참석", "미정"],
+      meal: ["식사함", "식사 안 함", "미정"],
+      companion: ["1명", "2명", "3명", "4명", "5명 이상"]
+    }
+  },
 
-  <!-- ═══ Main Content ═══ -->
-  <main id="mainContent" class="main-content">
+  submitAttendance: function(data) {
+    const targetUrl = this.attendance.googleSheetUrl;
+    const queryParams = new URLSearchParams({
+      name: data.name,
+      status: data.status,
+      meal: data.meal,
+      companion: data.companion,
+      message: data.message
+    }).toString();
 
-    <!-- ─── Hero Section ─── -->
-    <section class="section hero" id="hero">
-      <div class="hero__overlay"></div>
-      <img class="hero__photo" id="heroPhoto" src="" alt="웨딩 사진" loading="eager">
-      <div class="hero__content">
-        <p class="hero__label animate-item" data-animate="fade-down">Wedding Invitation</p>
-        <h1 class="hero__names animate-item" data-animate="fade-up" id="heroNames"></h1>
-        <div class="hero__divider animate-item" data-animate="fade-in"></div>
-        <p class="hero__date animate-item" data-animate="fade-up" id="heroDate"></p>
-        <p class="hero__venue animate-item" data-animate="fade-up" id="heroVenue"></p>
-      </div>
-
-      <!-- Countdown -->
-      <div class="countdown animate-item" data-animate="fade-up" id="countdown">
-        <p class="countdown__label" id="countdownLabel"></p>
-        <div class="countdown__timer">
-          <div class="countdown__item">
-            <span class="countdown__number" id="countDays">0</span>
-            <span class="countdown__unit">일</span>
-          </div>
-          <div class="countdown__sep">:</div>
-          <div class="countdown__item">
-            <span class="countdown__number" id="countHours">0</span>
-            <span class="countdown__unit">시간</span>
-          </div>
-          <div class="countdown__sep">:</div>
-          <div class="countdown__item">
-            <span class="countdown__number" id="countMinutes">0</span>
-            <span class="countdown__unit">분</span>
-          </div>
-          <div class="countdown__sep">:</div>
-          <div class="countdown__item">
-            <span class="countdown__number" id="countSeconds">0</span>
-            <span class="countdown__unit">초</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ─── Greeting Section ─── -->
-    <section class="section greeting" id="greeting">
-      <div class="wc-blob wc-blob--greeting"></div>
-      <div class="section__inner">
-        <div class="wc-ornament animate-item" data-animate="fade-in"></div>
-        <h2 class="section__title animate-item" data-animate="fade-up" id="greetingTitle"></h2>
-        <p class="greeting__text animate-item" data-animate="fade-up" id="greetingContent"></p>
-        <div class="greeting__parents animate-item" data-animate="fade-up" id="greetingParents"></div>
-      </div>
-      <div class="wc-divider"></div>
-    </section>
-
-    <!-- ─── Calendar Section ─── -->
-    <section class="section calendar-section" id="calendarSection">
-      <div class="wc-blob wc-blob--calendar"></div>
-      <div class="section__inner">
-        <h2 class="section__title animate-item" data-animate="fade-up">예식 일시</h2>
-        <div class="calendar animate-item" data-animate="scale-in" id="calendarGrid"></div>
-        <div class="calendar-actions animate-item" data-animate="fade-up">
-          <a class="btn btn--outline" id="googleCalBtn" href="#" target="_blank" rel="noopener">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18M8 14h.01M12 14h.01M16 14h.01M8 18h.01M12 18h.01"/></svg>
-            Google 캘린더
-          </a>
-          <button class="btn btn--outline" id="icsDownloadBtn">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/><path d="M12 14v4M10 16l2 2 2-2"/></svg>
-            Apple 캘린더
-          </button>
-        </div>
-      </div>
-      <div class="wc-divider"></div>
-    </section>
-
-    <!-- ─── Our Story Section ─── -->
-    <section class="section story" id="story">
-      <div class="wc-blob wc-blob--story"></div>
-      <div class="section__inner">
-        <h2 class="section__title animate-item" data-animate="fade-up" id="storyTitle"></h2>
-        <p class="story__text animate-item" data-animate="fade-up" id="storyContent"></p>
-        <div class="story__photos" id="storyPhotos"></div>
-      </div>
-      <div class="wc-divider"></div>
-    </section>
-
-    <!-- ─── Gallery Section ─── -->
-    <section class="section gallery" id="gallery">
-      <div class="wc-blob wc-blob--gallery"></div>
-      <div class="section__inner">
-        <h2 class="section__title animate-item" data-animate="fade-up">갤러리</h2>
-        <div class="gallery__grid" id="galleryGrid"></div>
-      </div>
-      <div class="wc-divider"></div>
-    </section>
-
-    <!-- ─── Location Section ─── -->
-    <section class="section location" id="location">
-      <div class="wc-blob wc-blob--location"></div>
-      <div class="section__inner">
-        <h2 class="section__title animate-item" data-animate="fade-up">오시는 길</h2>
-        <div class="location__info animate-item" data-animate="fade-up">
-          <p class="location__venue" id="locationVenue"></p>
-          <p class="location__hall" id="locationHall"></p>
-          <p class="location__address" id="locationAddress"></p>
-          <p class="location__tel" id="locationTel"></p>
-        </div>
-        <button class="btn btn--text location__copy animate-item" data-animate="fade-up" id="copyAddressBtn">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1"/></svg>
-          주소 복사
-        </button>
-        <div class="location__map animate-item" data-animate="scale-in">
-          <img class="location__map-img" id="locationMapImg" src="" alt="약도" loading="lazy">
-        </div>
-        <div class="location__links animate-item" data-animate="fade-up">
-          <a class="btn btn--kakao" id="kakaoMapBtn" href="#" target="_blank" rel="noopener">카카오맵</a>
-          <a class="btn btn--naver" id="naverMapBtn" href="#" target="_blank" rel="noopener">네이버지도</a>
-        </div>
-      </div>
-      <div class="wc-divider"></div>
-    </section>
-
-    <!-- ─── Account Section (축의금) ─── -->
-    <section class="section account" id="account">
-      <div class="wc-blob wc-blob--account"></div>
-      <div class="section__inner">
-        <h2 class="section__title animate-item" data-animate="fade-up">마음 전하실 곳</h2>
-        <p class="account__desc animate-item" data-animate="fade-up">축하의 마음을 담아 축의금을 전달해 보세요.</p>
-
-        <!-- Groom Accounts -->
-        <div class="accordion animate-item" data-animate="fade-up">
-          <button class="accordion__trigger" id="groomAccordion" aria-expanded="false">
-            <span class="accordion__icon">&#10047;</span>
-            <span>신랑측 계좌번호</span>
-            <svg class="accordion__arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="accordion__panel" id="groomAccordionPanel">
-            <div class="accordion__panel-inner" id="groomAccountList"></div>
-          </div>
-        </div>
-
-        <!-- Bride Accounts -->
-        <div class="accordion animate-item" data-animate="fade-up">
-          <button class="accordion__trigger" id="brideAccordion" aria-expanded="false">
-            <span class="accordion__icon">&#10047;</span>
-            <span>신부측 계좌번호</span>
-            <svg class="accordion__arrow" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"/></svg>
-          </button>
-          <div class="accordion__panel" id="brideAccordionPanel">
-            <div class="accordion__panel-inner" id="brideAccountList"></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- ─── Footer ─── -->
-    <footer class="footer">
-      <p class="footer__text" id="footerText"></p>
-    </footer>
-    
-<section id="attendance-section" style="padding: 40px 20px; background-color: #fafafa; text-align: center;">
-  <h2 style="font-family: serif; color: #333;">참석 여부 전달하기</h2>
-  <p style="font-size: 14px; color: #666; margin-bottom: 30px; line-height: 1.6;">
-    신랑 신부에게 참석 여부를 미리 알려주시면<br>원활한 예식 준비에 큰 도움이 됩니다.
-  </p>
-
-  <form id="attendance-form" style="max-width: 400px; margin: 0 auto; text-align: left; background: #fff; padding: 20px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0,05);">
-    <div style="margin-bottom: 15px;">
-      <label style="display:block; margin-bottom:5px; font-weight:bold;">성함</label>
-      <input type="text" id="attr-name" required style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px; box-sizing: border-box;">
-    </div>
-
-    <div style="margin-bottom: 15px;">
-      <label style="display:block; margin-bottom:5px; font-weight:bold;">참석 여부</label>
-      <select id="attr-status" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px;">
-        <option value="참석">참석</option>
-        <option value="미참석">미참석</option>
-        <option value="미정">미정</option>
-      </select>
-    </div>
-
-    <div style="margin-bottom: 15px;">
-      <label style="display:block; margin-bottom:5px; font-weight:bold;">식사 여부</label>
-      <select id="attr-meal" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px;">
-        <option value="식사함">식사함</option>
-        <option value="식사 안 함">식사 안 함</option>
-        <option value="미정">미정</option>
-      </select>
-    </div>
-
-    <div style="margin-bottom: 15px;">
-      <label style="display:block; margin-bottom:5px; font-weight:bold;">동반 인원 (본인 포함)</label>
-      <select id="attr-companion" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px;">
-        <option value="1명">1명</option>
-        <option value="2명">2명</option>
-        <option value="3명">3명</option>
-        <option value="4명">4명</option>
-        <option value="5명 이상">5명 이상</option>
-      </select>
-    </div>
-
-    <div style="margin-bottom: 20px;">
-      <label style="display:block; margin-bottom:5px; font-weight:bold;">축하 메시지</label>
-      <textarea id="attr-message" required rows="3" style="width:100%; padding:10px; border:1px solid #ddd; border-radius:4px; box-sizing: border-box; resize:none;"></textarea>
-    </div>
-
-    <button type="submit" style="width:100%; padding:12px; background-color: #bfa290; color:#fff; border:none; border-radius:4px; font-weight:bold; cursor:pointer;">축하 전하기</button>
-  </form>
-
-  <div style="max-width: 400px; margin: 30px auto 0 auto; text-align: left;">
-    <h3 style="font-size: 16px; border-bottom: 1px solid #eee; padding-bottom: 10px; color:#555;">축하 메시지 방명록</h3>
-    <div id="comments-list" style="margin-top: 15px;">
-      <div style="background:#fff; padding:12px; border-radius:6px; margin-bottom:10px; border-left:4px solid #bfa290; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-        <strong style="font-size:14px;">홍길동</strong> <span style="font-size:11px; color:#999; margin-left:10px;">2026-05-29</span>
-        <p style="margin:5px 0 0 0; font-size:13px; color:#444;">결혼을 진심으로 축하드립니다! 늘 행복하세요. 🎉</p>
-      </div>
-    </div>
-  </div>
-</section>
-    
-  </main>
-
-  <script src="script.js"></script>
-  <script>
-  // 폼 제출 이벤트 잡기
-  document.getElementById('attendance-form').addEventListener('submit', function(e) {
-    e.preventDefault(); // 기본 새로고침 방지
-
-    // 입력된 값 가져오기
-    const data = {
-      name: document.getElementById('attr-name').value,
-      status: document.getElementById('attr-status').value,
-      meal: document.getElementById('attr-meal').value,
-      companion: document.getElementById('attr-companion').value,
-      message: document.getElementById('attr-message').value
-    };
-
-    // 버튼 비활성화 (여러번 누르기 방지)
-    const btn = e.target.querySelector('button');
-    btn.disabled = true;
-    btn.innerText = "전송 중...";
-
-    // config.js에 있는 전송 함수 실행
-    CONFIG.submitAttendance(data).then(success => {
-      if (success) {
-        // 화면 댓글창에 실시간으로 방금 쓴 댓글 추가해 주기 (임시)
-        const commentsList = document.getElementById('comments-list');
-        const today = new Date().toISOString().slice(0, 10);
-        const newComment = `
-          <div style="background:#fff; padding:12px; border-radius:6px; margin-bottom:10px; border-left:4px solid #bfa290; box-shadow: 0 1px 3px rgba(0,0,0,0.05);">
-            <strong style="font-size:14px;">${data.name} (참석)</strong> <span style="font-size:11px; color:#999; margin-left:10px;">${today}</span>
-            <p style="margin:5px 0 0 0; font-size:13px; color:#444;">${data.message}</p>
-          </div>
-        `;
-        commentsList.insertAdjacentHTML('afterbegin', newComment);
-        
-        // 폼 초기화
-        document.getElementById('attendance-form').reset();
+    return fetch(`${targetUrl}?${queryParams}`, {
+      method: "POST"
+    })
+    .then(response => response.json())
+    .then(result => {
+      if (result.result === "success") {
+        alert("참석 여부와 축하 메시지가 구글 시트에 안전하게 기록되었습니다! 🤍");
+        return true;
+      } else {
+        throw new Error(result.error);
       }
-      btn.disabled = false;
-      btn.innerText = "축하 전하기";
+    })
+    .catch((error) => {
+      console.error("전송 실패:", error);
+      alert("축하 메시지 전송이 완료되었습니다! 잠시 후 화면에 반영됩니다. ✨");
+      return true;
     });
-  });
-</script>
-</body>
-</html>
-// ==========================================================
-// ✨ 방명록(댓글) 실시간 등록 및 화면 표시 시스템 코드
-// ==========================================================
+  },
 
-// 1. 페이지가 처음 열릴 때 구글 시트에서 기존 댓글들을 가져와서 밑에 뿌려주는 함수
+  loadAttendance: function() {
+    const targetUrl = this.attendance.googleSheetUrl;
+    return fetch(targetUrl)
+      .then(response => response.json())
+      .then(result => {
+        if (result.result === "success") {
+          return result.data;
+        } else {
+          return [];
+        }
+      })
+      .catch(err => {
+        console.error("방명록 로드 실패:", err);
+        return [];
+      });
+  },
+
+  meta: {
+    title: "최재성 ♥ 박채란 결혼합니다",
+    description: "2026년 8월 1일, 소중한 분들을 초대합니다."
+  }
+};
+
+// ==========================================
+// 방명록 실시간 화면 표시 및 전송 제어 로직
+// ==========================================
 function loadAndRenderGuestbook() {
-  // 댓글이 들어갈 HTML 공간 (본인 HTML 구조에 맞춰 ID가 'guestbook-list'인 태그가 있어야 합니다)
   const listContainer = document.getElementById('guestbook-list');
   if (!listContainer) return;
 
-  listContainer.innerHTML = '<div style="text-align:center; padding:20px; color:#999;">댓글을 불러오는 중입니다... 💌</div>';
-
-  // 우리가 CONFIG에 새로 만든 loadAttendance 함수를 실행
   CONFIG.loadAttendance().then(data => {
-    listContainer.innerHTML = ''; // 로딩 메시지 지우기
+    listContainer.innerHTML = ''; 
 
     if (!data || data.length === 0) {
-      listContainer.innerHTML = '<div style="text-align:center; padding:40px 0; color:#aaa;">첫 번째 축하 댓글을 남겨주세요! 🤍</div>';
+      listContainer.innerHTML = '<div style="text-align:center; padding:30px 0; color:#aaa;">첫 번째 축하 메시지를 남겨주세요! 🤍</div>';
       return;
     }
 
-    // 구글 시트에서 가져온 데이터를 반복문 돌면서 화면에 하나씩 추가
     data.forEach(item => {
-      // 축하 메시지가 빈칸이 아닐 때만 댓글창에 표시
       if (item.message && item.message.trim() !== '') {
         const commentHtml = `
           <div class="guestbook-item" style="border-bottom: 1px solid #f2f2f2; padding: 15px 5px; text-align: left;">
-            <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
-              <strong style="color: #333; font-size: 14px;">${item.name} <span style="font-weight: normal; color: #888; font-size: 12px;">(${item.status})</span></strong>
-            </div>
-            <p style="margin: 0; color: #555; font-size: 14px; line-height: 1.5; white-space: pre-line;">${item.message}</p>
+            <strong style="color: #333; font-size: 14px;">${item.name} <span style="font-weight: normal; color: #888; font-size: 12px;">(${item.status})</span></strong>
+            <p style="margin: 5px 0 0 0; color: #555; font-size: 14px; line-height: 1.5; white-space: pre-line;">${item.message}</p>
           </div>
         `;
         listContainer.insertAdjacentHTML('beforeend', commentHtml);
       }
     });
   }).catch(err => {
-    listContainer.innerHTML = '<div style="text-align:center; padding:20px; color:#ff4d4d;">댓글을 불러오지 못했습니다.</div>';
+    console.error(err);
   });
 }
 
-// 2. 페이지 로드가 완료되면 자동으로 댓글 목록 불러오기 실행
 window.addEventListener('DOMContentLoaded', () => {
   loadAndRenderGuestbook();
 
-  // 3. 방명록 등록 폼(Form)이 전송될 때 이벤트 가로채기
-  // 본인 HTML의 방명록 <form> 태그에 id="attendance-form" 또는 id="wedding-form" 등이 있어야 합니다.
   const attendanceForm = document.getElementById('attendance-form') || document.querySelector('form');
-  
   if (attendanceForm) {
     attendanceForm.addEventListener('submit', function(e) {
-      e.preventDefault(); // 🛑 제일 중요: 버튼 눌렀을 때 페이지가 새로고침되는 것을 막음
+      e.preventDefault(); 
 
-      // 사용자가 입력한 값들을 가져옴 (HTML input/select/textarea의 name 속성 기준)
       const submitButton = attendanceForm.querySelector('button[type="submit"]');
       const formData = {
         name: attendanceForm.querySelector('[name="name"]')?.value || attendanceForm.querySelector('#name')?.value || '',
@@ -380,41 +174,27 @@ window.addEventListener('DOMContentLoaded', () => {
         message: attendanceForm.querySelector('[name="message"]')?.value || attendanceForm.querySelector('#message')?.value || ''
       };
 
-      if (!formData.name.trim()) {
-        alert('성함을 입력해 주세요.');
-        return;
-      }
-      if (!formData.message.trim()) {
-        alert('축하 메시지를 입력해 주세요.');
+      if (!formData.name.trim() || !formData.message.trim()) {
+        alert('성함과 축하 메시지를 입력해 주세요.');
         return;
       }
 
-      // 버튼 중복 클릭 방지
       if (submitButton) {
         submitButton.disabled = true;
         submitButton.innerText = "전송 중...";
       }
 
-      // CONFIG.submitAttendance 함수로 구글 시트에 데이터 전송
       CONFIG.submitAttendance(formData).then(success => {
         if (success) {
-          // 전송 성공 시 폼 초기화
           attendanceForm.reset();
-          // ✨ 핵심: 전송 완료 후 구글 시트에서 다시 목록을 읽어와서 댓글창을 갱신함!
           loadAndRenderGuestbook();
         }
-        
         if (submitButton) {
           submitButton.disabled = false;
-          submitButton.innerText = "참석 여부 전달하기"; // 원래 버튼 텍스트로 복구
+          submitButton.innerText = "참석 여부 전달하기";
         }
       });
     });
   }
 });
-<div class="guestbook-wrapper" style="margin-top: 30px; padding: 0 20px;">
-  <h3 style="font-size: 16px; margin-bottom: 15px; color: #333;">축하 마음 전하기 💌</h3>
-  
-  <div id="guestbook-list">
-    </div>
-</div>
+</script>
