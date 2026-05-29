@@ -73,10 +73,6 @@ const CONFIG = {
     }
   },
 
-  /* [수정됨] 
-     구글 웹 앱(App Script) 보안 정책(CORS)으로 인해 브라우저 단에서 POST 전송 에러가 뜨는 현상을 
-     방지하기 위해 쿼리 스트링 방식으로 안전하게 전송 방식을 변경했습니다.
-  */
   submitAttendance: function(data) {
     const targetUrl = this.attendance.googleSheetUrl;
     const queryParams = new URLSearchParams({
@@ -101,29 +97,24 @@ const CONFIG = {
     })
     .catch((error) => {
       console.error("전송 실패:", error);
-      // 구글 스크립트는 내부 리다이렉션 처리가 되어서 브라우저가 에러로 인식해도 정상 저장되는 경우가 대부분입니다.
       alert("축하 메시지 전송이 완료되었습니다! 잠시 후 화면에 반영됩니다. ✨");
       return true;
     });
   },
 
-  /* [✨ 새로 추가됨] 
-     구글 시트에 저장되어 있는 방명록(축하 메시지) 목록을 화면 밑에 다시 불러와서 
-     뿌려주기 위한 필수 연동 함수입니다.
-  */
   loadAttendance: function() {
     const targetUrl = this.attendance.googleSheetUrl;
     return fetch(targetUrl)
       .then(response => response.json())
       .then(result => {
         if (result.result === "success") {
-          return result.data; // 구글 시트에서 가져온 방명록 데이터 배열 반환
+          return result.data;
         } else {
           return [];
         }
       })
       .catch(err => {
-        console.error("방명록 데이터를 불러오는 데 실패했습니다:", err);
+        console.error("방명록 로드 실패:", err);
         return [];
       });
   },
@@ -133,3 +124,72 @@ const CONFIG = {
     description: "2026년 8월 1일, 소중한 분들을 초대합니다."
   }
 };
+
+function loadAndRenderGuestbook() {
+  const listContainer = document.getElementById('guestbook-list');
+  if (!listContainer) return;
+
+  CONFIG.loadAttendance().then(data => {
+    listContainer.innerHTML = ''; 
+
+    if (!data || data.length === 0) {
+      listContainer.innerHTML = '<div style="text-align:center; padding:30px 0; color:#aaa;">첫 번째 축하 메시지를 남겨주세요! 🤍</div>';
+      return;
+    }
+
+    data.forEach(item => {
+      if (item.message && item.message.trim() !== '') {
+        const commentHtml = `
+          <div class="guestbook-item" style="border-bottom: 1px solid #f2f2f2; padding: 15px 5px; text-align: left;">
+            <strong style="color: #333; font-size: 14px;">${item.name} <span style="font-weight: normal; color: #888; font-size: 12px;">(${item.status})</span></strong>
+            <p style="margin: 5px 0 0 0; color: #555; font-size: 14px; line-height: 1.5; white-space: pre-line;">${item.message}</p>
+          </div>
+        `;
+        listContainer.insertAdjacentHTML('beforeend', commentHtml);
+      }
+    });
+  }).catch(err => {
+    console.error(err);
+  });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+  loadAndRenderGuestbook();
+
+  const attendanceForm = document.getElementById('attendance-form') || document.querySelector('form');
+  if (attendanceForm) {
+    attendanceForm.addEventListener('submit', function(e) {
+      e.preventDefault(); 
+
+      const submitButton = attendanceForm.querySelector('button[type="submit"]');
+      const formData = {
+        name: attendanceForm.querySelector('[name="name"]')?.value || attendanceForm.querySelector('#name')?.value || '',
+        status: attendanceForm.querySelector('[name="status"]')?.value || attendanceForm.querySelector('#status')?.value || '참석',
+        meal: attendanceForm.querySelector('[name="meal"]')?.value || attendanceForm.querySelector('#meal')?.value || '미정',
+        companion: attendanceForm.querySelector('[name="companion"]')?.value || attendanceForm.querySelector('#companion')?.value || '1명',
+        message: attendanceForm.querySelector('[name="message"]')?.value || attendanceForm.querySelector('#message')?.value || ''
+      };
+
+      if (!formData.name.trim() || !formData.message.trim()) {
+        alert('성함과 축하 메시지를 입력해 주세요.');
+        return;
+      }
+
+      if (submitButton) {
+        submitButton.disabled = true;
+        submitButton.innerText = "전송 중...";
+      }
+
+      CONFIG.submitAttendance(formData).then(success => {
+        if (success) {
+          attendanceForm.reset();
+          loadAndRenderGuestbook();
+        }
+        if (submitButton) {
+          submitButton.disabled = false;
+          submitButton.innerText = "참석 여부 전달하기";
+        }
+      });
+    });
+  }
+});
