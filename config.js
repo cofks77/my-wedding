@@ -40,7 +40,7 @@ const CONFIG = {
 
   mapLinks: {
     kakao: "https://kko.to/0elyoFiXhP",
-    naver: "https://naver.me/FzSZfBX6"
+    navers: "https://naver.me/FzSZfBX6"
   },
 
   accounts: {
@@ -73,6 +73,7 @@ const CONFIG = {
     }
   },
 
+  // [수정] CORS 에러를 우회하고 데이터 누락을 막기 위해 GET 방식으로 안전하게 전환했습니다.
   submitAttendance: function(data) {
     const targetUrl = this.attendance.googleSheetUrl;
     const queryParams = new URLSearchParams({
@@ -84,21 +85,24 @@ const CONFIG = {
     }).toString();
 
     return fetch(`${targetUrl}?${queryParams}`, {
-      method: "POST"
+      method: "GET" // 구글 웹앱(Apps Script) 전송 시가장 안전한 방식
     })
-    .then(response => response.json())
+    .then(response => {
+      if (!response.ok) throw new Error('네트워크 응답 불안정');
+      return response.json();
+    })
     .then(result => {
       if (result.result === "success") {
-        alert("참석 여부와 축하 메시지가 구글 시트에 안전하게 기록되었습니다! 🤍");
+        alert("참석 여부와 축하 메시지가 안전하게 기록되었습니다! 🤍");
         return true;
       } else {
-        throw new Error(result.error);
+        throw new Error(result.error || "알 수 없는 에러");
       }
     })
     .catch((error) => {
       console.error("전송 실패:", error);
-      alert("축하 메시지 전송이 완료되었습니다! 잠시 후 화면에 반영됩니다. ✨");
-      return true;
+      alert("서버 연결이 원활하지 않습니다. 잠시 후 다시 시도해 주세요. 🥲");
+      return false; // 확실히 실패했음을 리턴하여 폼이 리셋되는 대참사 방지
     });
   },
 
@@ -125,6 +129,17 @@ const CONFIG = {
   }
 };
 
+// [수정] 단순 텍스트 입력 시 HTML 태그 장난이나 레이아웃 깨짐을 방지하는 안전장치 함수 추가
+function escapeHtml(text) {
+  if (!text) return '';
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
 function loadAndRenderGuestbook() {
   const listContainer = document.getElementById('guestbook-list');
   if (!listContainer) return;
@@ -139,10 +154,15 @@ function loadAndRenderGuestbook() {
 
     data.forEach(item => {
       if (item.message && item.message.trim() !== '') {
+        // [수정] 렌더링 시 악성 스크립트 실행 방지를 위해 escapeHtml 적용
+        const safeName = escapeHtml(item.name);
+        const safeStatus = escapeHtml(item.status);
+        const safeMessage = escapeHtml(item.message);
+
         const commentHtml = `
           <div class="guestbook-item" style="border-bottom: 1px solid #f2f2f2; padding: 15px 5px; text-align: left;">
-            <strong style="color: #333; font-size: 14px;">${item.name} <span style="font-weight: normal; color: #888; font-size: 12px;">(${item.status})</span></strong>
-            <p style="margin: 5px 0 0 0; color: #555; font-size: 14px; line-height: 1.5; white-space: pre-line;">${item.message}</p>
+            <strong style="color: #333; font-size: 14px;">${safeName} <span style="font-weight: normal; color: #888; font-size: 12px;">(${safeStatus})</span></strong>
+            <p style="margin: 5px 0 0 0; color: #555; font-size: 14px; line-height: 1.5; white-space: pre-line;">${safeMessage}</p>
           </div>
         `;
         listContainer.insertAdjacentHTML('beforeend', commentHtml);
@@ -180,6 +200,7 @@ window.addEventListener('DOMContentLoaded', () => {
         submitButton.innerText = "전송 중...";
       }
 
+      // [수정] 성공(success가 true)일 때만 폼을 리셋하도록 엄격하게 제어
       CONFIG.submitAttendance(formData).then(success => {
         if (success) {
           attendanceForm.reset();
