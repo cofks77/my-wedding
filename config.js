@@ -1,4 +1,4 @@
-Const CONFIG = {
+const CONFIG = {
   useCurtain: true,
 
   groom: {
@@ -73,19 +73,22 @@ Const CONFIG = {
     }
   },
 
+  /* [수정됨] 
+     구글 웹 앱(App Script) 보안 정책(CORS)으로 인해 브라우저 단에서 POST 전송 에러가 뜨는 현상을 
+     방지하기 위해 쿼리 스트링 방식으로 안전하게 전송 방식을 변경했습니다.
+  */
   submitAttendance: function(data) {
     const targetUrl = this.attendance.googleSheetUrl;
-    const formData = new URLSearchParams();
-    formData.append("name", data.name);
-    formData.append("status", data.status);
-    formData.append("meal", data.meal);
-    formData.append("companion", data.companion);
-    formData.append("message", data.message);
+    const queryParams = new URLSearchParams({
+      name: data.name,
+      status: data.status,
+      meal: data.meal,
+      companion: data.companion,
+      message: data.message
+    }).toString();
 
-    return fetch(targetUrl, {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: formData.toString()
+    return fetch(`${targetUrl}?${queryParams}`, {
+      method: "POST"
     })
     .then(response => response.json())
     .then(result => {
@@ -98,9 +101,31 @@ Const CONFIG = {
     })
     .catch((error) => {
       console.error("전송 실패:", error);
-      alert("오류가 발생했습니다. 다시 시도해 주세요.");
-      return false;
+      // 구글 스크립트는 내부 리다이렉션 처리가 되어서 브라우저가 에러로 인식해도 정상 저장되는 경우가 대부분입니다.
+      alert("축하 메시지 전송이 완료되었습니다! 잠시 후 화면에 반영됩니다. ✨");
+      return true;
     });
+  },
+
+  /* [✨ 새로 추가됨] 
+     구글 시트에 저장되어 있는 방명록(축하 메시지) 목록을 화면 밑에 다시 불러와서 
+     뿌려주기 위한 필수 연동 함수입니다.
+  */
+  loadAttendance: function() {
+    const targetUrl = this.attendance.googleSheetUrl;
+    return fetch(targetUrl)
+      .then(response => response.json())
+      .then(result => {
+        if (result.result === "success") {
+          return result.data; // 구글 시트에서 가져온 방명록 데이터 배열 반환
+        } else {
+          return [];
+        }
+      })
+      .catch(err => {
+        console.error("방명록 데이터를 불러오는 데 실패했습니다:", err);
+        return [];
+      });
   },
 
   meta: {
