@@ -244,33 +244,34 @@
   
   <script>
   // [통합 스크립트] 방명록 데이터 불러오기 및 실시간 폼 제출 컨트롤
-  function loadAndRenderGuestbook() {
-    const listContainer = document.getElementById('comments-list'); // 타겟 통합
-    if (!listContainer) return;
+function loadAndRenderGuestbook() {
+  const listContainer = document.getElementById('comments-list'); 
+  if (!listContainer) return;
 
-    if (typeof CONFIG !== 'undefined' && typeof CONFIG.loadAttendance === 'function') {
-      CONFIG.loadAttendance().then(data => {
-        listContainer.innerHTML = ''; 
+  if (typeof CONFIG !== 'undefined' && typeof CONFIG.loadAttendance === 'function') {
+    CONFIG.loadAttendance().then(data => {
+      listContainer.innerHTML = ''; 
 
-        if (!data || data.length === 0) {
-          listContainer.innerHTML = '<div style="text-align:center; padding:20px; color:#aaa; font-size:13px;">첫 번째 축하 메시지를 남겨주세요! 🤍</div>';
-          return;
+      if (!data || data.length === 0) {
+        listContainer.innerHTML = '<div style="text-align:center; padding:20px; color:#aaa; font-size:13px;">첫 번째 축하 메시지를 남겨주세요! 🤍</div>';
+        return;
+      }
+
+      data.forEach(item => {
+        if (item.message && item.message.trim() !== '') {
+          // [수정] ${item.status} 부분을 삭제하여 이름만 깔끔하게 나오도록 변경했습니다.
+          const commentHtml = `
+            <div class="guestbook-item" style="background:#fff; padding:12px; border-radius:6px; margin-bottom:10px; border-left:4px solid #bfa290; box-shadow: 0 1px 3px rgba(0,0,0,0.05); text-align: left;">
+              <strong style="color: #333; font-size: 14px;">${item.name}</strong>
+              <p style="margin: 5px 0 0 0; color: #444; font-size: 13px; line-height: 1.5; white-space: pre-line;">${item.message}</p>
+            </div>
+          `;
+          listContainer.insertAdjacentHTML('beforeend', commentHtml);
         }
-
-        data.forEach(item => {
-          if (item.message && item.message.trim() !== '') {
-            const commentHtml = `
-              <div class="guestbook-item" style="background:#fff; padding:12px; border-radius:6px; margin-bottom:10px; border-left:4px solid #bfa290; box-shadow: 0 1px 3px rgba(0,0,0,0.05); text-align: left;">
-                <strong style="color: #333; font-size: 14px;">${item.name} <span style="font-weight: normal; color: #888; font-size: 11px;">(${item.status})</span></strong>
-                <p style="margin: 5px 0 0 0; color: #444; font-size: 13px; line-height: 1.5; white-space: pre-line;">${item.message}</p>
-              </div>
-            `;
-            listContainer.insertAdjacentHTML('beforeend', commentHtml);
-          }
-        });
-      }).catch(err => console.error("댓글 로드 실패:", err));
-    }
+      });
+    }).catch(err => console.error("댓글 로드 실패:", err));
   }
+}
 
   // DOM 로드 완료 시 실행 및 제출 리스너 단일화
   window.addEventListener('DOMContentLoaded', () => {
