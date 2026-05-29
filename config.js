@@ -58,7 +58,7 @@ const CONFIG = {
   attendance: {
     title: "참석 여부 전달하기",
     description: "신랑 신부에게 참석 여부를 미리 알려주시면\n원활한 예식 준비에 큰 도움이 됩니다.",
-    googleSheetUrl: "https://script.google.com/macros/s/AKfycbx8DB7dU-w0n5g2Zg07q_8nnj5FpcGCnM6QLzifUy29Ny2MW89158ZUy8tZ1XsCj_Uf/exec",
+    googleSheetUrl: "https://script.google.com/macros/s/AKfycbwM5TAgO2tB2es6y_yQDVxbnGwh4Z7Ds0z9b1l6OLJv-_QmU6urXx8Cd41fiCwclkng/exec",
     labels: {
       name: "성함",
       status: "참석 여부",
