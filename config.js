@@ -40,7 +40,7 @@ const CONFIG = {
 
   mapLinks: {
     kakao: "https://kko.to/0elyoFiXhP",
-    navers: "https://naver.me/FzSZfBX6"
+    naver: "https://naver.me/FzSZfBX6"
   },
 
   accounts: {
